@@ -1,4 +1,4 @@
-# IS305-cooperation
+# Music generation Forum——cooperation project
 
 #### daniellePie—FC
 #### saltywaterd.-YSY
