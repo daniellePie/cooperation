@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 80
 spring:
   # 配置数据源信息
   datasource:
@@ -14,3 +14,6 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+user:
+  # 默认头像地址
+  default-avator: 123sad
