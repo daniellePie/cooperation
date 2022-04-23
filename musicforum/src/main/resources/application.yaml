@@ -1,0 +1,22 @@
+server:
+  port: 80
+spring:
+  # 配置数据源信息
+  datasource:
+    # 配置数据源类型
+    type: com.zaxxer.hikari.HikariDataSource
+    # 配置连接数据库信息
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-bp142lb03717y8daupo.mysql.rds.aliyuncs.com:3306/music?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: Music2022
+  # 配置MyBatis日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+user:
+  # 默认头像地址
+  default-avator: music/photo/avator/default
+qiniu:
+  AccessKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl
+  SecretKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl
