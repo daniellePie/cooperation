@@ -10,6 +10,7 @@ import musicForum.vo.param.login;
 import musicForum.vo.param.register;
 import musicForum.vo.result.LoginBack;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -21,6 +22,9 @@ import java.util.Date;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Value("${user.efault-avator}")
+    private String dafaultAvatorPath;
+
     @Override
     public Result login(login loginParam) {
         String account = loginParam.getAccount();
@@ -34,6 +38,7 @@ public class UserServiceImpl implements UserService {
             return Result.fail(ErrorCode.ACCOUNT_PWD_NOT_EXIST.getCode(),
                     ErrorCode.ACCOUNT_PWD_NOT_EXIST.getMsg());
         }else {
+            //可能跟返回uservo会更好，消息更多
             LoginBack loginBack = new LoginBack(users.getId(), users.getNickname(), users.getAccount());
             return Result.success(loginBack);
         }
@@ -59,6 +64,10 @@ public class UserServiceImpl implements UserService {
             user_create.setNickname(nickname);
             user_create.setPassword(pwd);
             user_create.setPhone(phone);
+            //可能需要单独处理show
+            user_create.setShow(0);
+            //单独处理头像,单独写一个方法,七牛云服务器
+            user_create.setAvator(dafaultAvatorPath);
             userMapper.insert(user_create);
             return Result.success(null);
         }else {
