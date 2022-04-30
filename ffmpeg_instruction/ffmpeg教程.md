@@ -1,0 +1,44 @@
+# ffmpeg教程
+## 在Linux上安装
+- 如果没有更高的权限，可以这么安装
+  - 将那个`.tar.xz`文件解压
+  - `xz -d ***.xz`
+  - `tar -xvf ***.tar`
+  - 然后有一个ffmpeg就可以直接用了
+  
+## 常用指令
+- 查看视频的基本信息
+  - `ffmpeg -i input.mp4`
+- 裁剪
+  - `ffmpeg -i input.mp4 -vf crop="720:720:280:0" output.mp4`
+  - vf的意思是video filter
+  - crop里面的四个参数分别是whxy(width, height, 从x开始裁剪, 从y开始裁剪)
+- 调整帧率
+  - `ffmpeg -i input -r 25 output`
+  - -r后面输入帧率就可以了
+- resize video
+  - 假设input是1920x1080，想变成480x320
+  - `ffmpeg -i input -vf scale=480:-1 output`
+  - 如果是-1，就会按照原来的尺寸进行缩放
+- 将视频帧导出
+  - `ffmpeg -i input -r 25/1 %6d.png`
+  - 帧速率指定为25帧1秒
+  - %6d表示需要是6位
+  - %06d也可以
+  - 输出png
+- 图片合成视频
+  - `ffmpeg -i <input> -r <fps> <output>`
+  - 比如图片的名字都是`img000001.png`这种形式，那么input就写`img%06d.png`
+  - 可以添加`-y`表示覆盖
+  - 这样生成的视频是没有声音的
+- 音视频合成
+  - 适用于视频本身没有声音的情况
+  - `ffmpeg -i <audio> -i <video> <output>`
+- 截取一段视频
+  - `ffmpeg -i <input> -ss 3 -t 23 <output>`
+  - 从3s开始，截取长度为23s的视频
+- 合并音频(concat)
+  - `ffmpeg -i "concat:1.mp3|2.mp3" -acodec copy concat.mp3`
+- 混合音频(remix)
+  - `ffmpeg -i 1.mp3 -i 2.mp3 -filter_complex amix=inputs=2:duration=first:dropout_transition=2  output.mp3`
+  - 要是多个输入就改变`inputs=<num_input>`就可以了
