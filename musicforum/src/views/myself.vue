@@ -1,6 +1,6 @@
 <template>
 	<div class="about">
-	  <h1>Myself</h1>
+	  <h1>个人中心</h1>
 	</div>
 </template>
 
