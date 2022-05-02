@@ -38,7 +38,8 @@
   - `ffmpeg -i <input> -ss 3 -t 23 <output>`
   - 从3s开始，截取长度为23s的视频
 - 合并音频(concat)
-  - `ffmpeg -i "concat:1.mp3|2.mp3" -acodec copy concat.mp3`
+  - `ffmpeg -i "concat:1.mp3|2.mp3|3.mp3" -acodec copy concat.mp3`
+  - 这个方法只支持MP3格式
 - 混合音频(remix)
-  - `ffmpeg -i 1.mp3 -i 2.mp3 -filter_complex amix=inputs=2:duration=first:dropout_transition=2  output.mp3`
+  - `ffmpeg -i 1.mp3 -i 2.mp3 -i 3.mp3 -filter_complex amix=inputs=3:duration=first:dropout_transition=2  output.mp3`
   - 要是多个输入就改变`inputs=<num_input>`就可以了
