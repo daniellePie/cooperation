@@ -16,4 +16,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 user:
   # 默认头像地址
-  default-avator: 123sad
+  default-avator: music/photo/avator/default
+qiniu:
+  AccessKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl
+  SecretKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl
