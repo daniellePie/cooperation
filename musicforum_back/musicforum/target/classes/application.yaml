@@ -17,6 +17,12 @@ mybatis-plus:
 user:
   # 默认头像地址
   default-avator: music/photo/avator/default
+  avator-parent-path: music/photo/avator/
+music:
+  # 音频相关父路径
+  local-storage-parent-path: /home/music/storage/
+  remote-storage-parent-path: /music/music/
+  musicImg-parent-path: /music/photo/music/
 qiniu:
   AccessKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl
   SecretKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl

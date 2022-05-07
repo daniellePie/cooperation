@@ -10,17 +10,15 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class musicUpload {
+public class musicComment {
     @TableId
     private Long id;
 
     private Long upUserId;
-    private String name;
-    private Date upTime;
-    private String savePath;
-    private String photoPath;
-    private String description;
-    private Integer type;
-    private Integer duration;
-    private Integer permission;
+    private String content;
+    private Date commentTime;
+    private Long musicId;
+    private Long toUserId;
+    private Long parentId;
+    private Integer level;
 }
