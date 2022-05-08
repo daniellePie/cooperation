@@ -22,10 +22,9 @@ import java.util.Date;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
-    @Value("${user.efault-avator}")
+    @Value("${user.default-avator}")
     private String dafaultAvatorPath;
 
-    @Override
     public Result login(login loginParam) {
         String account = loginParam.getAccount();
         String password = loginParam.getPassword();
@@ -43,7 +42,6 @@ public class UserServiceImpl implements UserService {
             return Result.success(loginBack);
         }
     }
-    @Override
     public Result register(register registerParam){
         String account = registerParam.getAccount();
         String nickname = registerParam.getNickname();
@@ -76,7 +74,6 @@ public class UserServiceImpl implements UserService {
                     ErrorCode.ACCOUNT_ALREADY_EXIST.getMsg());
         }
     }
-    @Override
     public Result detail(Long id){
         users users = userMapper.selectById(id);
         if(users!=null){

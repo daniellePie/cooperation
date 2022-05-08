@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MusicUtilsTest {
-    @Test
     public void getMp3Duration(){
         String filepath1 = "C:/Users/admin/Desktop/wave.mp3";
         String filepath2 = "C:/Users/admin/Desktop/stone.mp3";
@@ -20,7 +19,6 @@ public class MusicUtilsTest {
         System.out.println(MusicUtils.getMp3Duration(filepath3));
     }
 
-    @Test
     public void concatMp3List(){
         ArrayList<String> filePaths = new ArrayList<>();
         filePaths.add("C:/Users/admin/Desktop/wave.mp3");
@@ -28,13 +26,11 @@ public class MusicUtilsTest {
         String outFilePath = "C:/Users/admin/Desktop/outTry.mp3";
         MusicUtils.concatMp3List(filePaths,outFilePath);
     }
-    @Test
     public void generateNullMp3(){
         String filepath = "C:/Users/admin/Desktop/nullTry.mp3";
         Double s = 5.4;
         MusicUtils.generateNullMp3(filepath,s);
     }
-    @Test
     public void mixMp3List(){
         ArrayList<String> filePaths = new ArrayList<>();
         filePaths.add("C:/Users/admin/Desktop/wave.mp3");
@@ -42,7 +38,6 @@ public class MusicUtilsTest {
         String outFilePath = "C:/Users/admin/Desktop/mixTry.mp3";
         MusicUtils.mixMp3List(filePaths,outFilePath);
     }
-    @Test
     public void concatMp3ListWithNull() throws IOException {
         Path path = Paths.get("C:/Users/admin/Desktop/temAudio");
         Files.createDirectories(path);

@@ -18,6 +18,7 @@ public class musicUpload {
     private String name;
     private Date upTime;
     private String savePath;
+    private String photoPath;
     private String description;
     private Integer type;
     private Integer duration;
