@@ -81,9 +81,37 @@
 	  
 			<v-col >
 				<div class="about">
-					<h2>广场：杨幂爱的二八定律ym杨幂秦施</h2>
+					<h2>创作中心</h2>
 				</div>
 
+				<v-btn-toggle
+						v-model="track[0]"
+						multiple
+					>
+					<!-- 两个八度 -->
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+					<v-btn></v-btn>
+
+				</v-btn-toggle>
+
+				
+
+				<h1>{{track}}</h1>
+
+				
 			</v-col >
 
 
@@ -109,6 +137,15 @@ export default {
 					{ title: '设置', icon: 'mdi-account-group-outline' },
 				],
 				mini: true,
+				
+			// music track 
+			// mow only 4 track
+			track: [
+				[],[],[],[]
+			], 
+
+			file: "/public/audio/bg-music.mp3"
+			
     }
   },
 
@@ -126,12 +163,14 @@ export default {
 		this.$router.push({path:'/hotaudio',query:{'id':this.id}})
 	  } else if (title == '个人中心') {
 		this.$router.push({path:'/myself',query:{'id':this.id}})
-		} else if (title == '创作中心') {
-		this.$router.push({path:'/workspace',query:{'id':this.id}})
 	  } else {
 		this.$router.push({path:'/settings',query:{'id':this.id}})
 	  };
   	},
+
+		print_btn_toggle(){
+			console.log(this.toggle_exclusive)
+		},
 
 		
   },
@@ -145,7 +184,3 @@ export default {
 	}
 
 </style>
-
- 
-
- 

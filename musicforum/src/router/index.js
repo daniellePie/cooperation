@@ -7,6 +7,7 @@ import Hotaudio from '../views/hotaudio.vue'
 import Myself from '../views/myself.vue'
 import Register from '../views/register/regis.vue'
 import Forget from '../views/register/forget.vue'
+import Workspace from '../views/workspace.vue'
 // import test from '../views/register/components/register.vue'
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
     path: '/myfollowing',
     name: 'myfollowing',
     component: Myfollowing
+  },
+  {
+    path: '/workspace',
+    name: 'workspace',
+    component: Workspace
   },
 ]
 
