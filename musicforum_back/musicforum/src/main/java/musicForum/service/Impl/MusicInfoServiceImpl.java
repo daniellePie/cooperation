@@ -23,17 +23,24 @@ import java.util.List;
 @Service
 public class MusicInfoServiceImpl implements MusicInfoService {
     @Autowired
-    MusicUploadMapper musicUploadMapper;
+    private MusicUploadMapper musicUploadMapper;
     @Autowired
-    MusicLikeMapper musicLikeMapper;
+    private MusicLikeMapper musicLikeMapper;
     @Autowired
-    MusicFavoriteMapper musicFavoriteMapper;
+    private MusicFavoriteMapper musicFavoriteMapper;
     @Autowired
-    MusicCommentMapper musicCommentMapper;
-    @Value("remote-storage-parent-path")
-    String musicParentPath;
-    @Value("musicImg-parent-path")
-    String musicImgParentPath;
+    private MusicCommentMapper musicCommentMapper;
+    @Value("${music.remote-storage-parent-path}")
+    private String musicParentPath;
+    @Value("${music.musicImg-parent-path}")
+    private String musicImgParentPath;
+
+    /**
+     * 之后可以改成按照时间排序返回评论
+     * @param id
+     * @param userId
+     * @return
+     */
     public Result getMusicDetail(Long id,Long userId){
         //分别查出内容，汇总到返回结构
         musicUpload musicUpload = musicUploadMapper.selectById(id);
@@ -79,7 +86,7 @@ public class MusicInfoServiceImpl implements MusicInfoService {
     }
     public List<musicCommentReturn> getComments(Long id){
         QueryWrapper<musicComment> musicCommentQueryWrapper = new QueryWrapper<>();
-        musicCommentQueryWrapper.eq("music_id",id).eq("level",1);
+        musicCommentQueryWrapper.eq("music_id",id).eq("level",1).orderByAsc("comment-time");
         List<musicComment> musicComments = musicCommentMapper.selectList(musicCommentQueryWrapper);
         //转return再查子评论
         ArrayList<musicCommentReturn> musicCommentReturns = new ArrayList<>();
@@ -102,7 +109,7 @@ public class MusicInfoServiceImpl implements MusicInfoService {
     }
     public List<musicCommentReturn> getChildrenComment(Long musicId,Long parentId){
         QueryWrapper<musicComment> musicCommentQueryWrapper = new QueryWrapper<>();
-        musicCommentQueryWrapper.eq("music_id",musicId).eq("parent_id",parentId).eq("level",2);
+        musicCommentQueryWrapper.eq("music_id",musicId).eq("parent_id",parentId).eq("level",2).orderByAsc("comment-time");
         List<musicComment> musicComments = musicCommentMapper.selectList(musicCommentQueryWrapper);
         ArrayList<musicCommentReturn> musicCommentReturns = new ArrayList<>();
         for (musicComment musiccomment : musicComments) {
