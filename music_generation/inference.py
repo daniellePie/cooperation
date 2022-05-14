@@ -10,22 +10,26 @@ from utils.utils import Logger, mkdir, save_json, setup_seed
 
 def get_args():
     arg_parser = ArgumentParser()
-    arg_parser.add_argument("--audio_dir", type=str, default='data_train')
+    arg_parser.add_argument("--audio_dir", type=str, default='data_inference')
     arg_parser.add_argument("--num_prediction", type=int, default=60, help="How many seconds to generate")
     arg_parser.add_argument("--batch_size", type=int, default=16)
     arg_parser.add_argument("--seq_length", type=int, default=10, help="The length of start of music, unit:second(s)")
-    arg_parser.add_argument("--num_generated", type=int, default=100)
-    arg_parser.add_argument("--output_dir", type=str, default='result_inference/0513-debug-more_music')
-    arg_parser.add_argument("--checkpoint_path", type=str, default='result/0513-more_music/checkpoint/best.pt')
-    arg_parser.add_argument("--device", type=str, default='cuda:0')
+    arg_parser.add_argument("--num_generated", type=int, default=16)
+    arg_parser.add_argument("--output_dir", type=str, default='result_inference/tmp')
+    arg_parser.add_argument("--checkpoint_path", type=str, default='result_train/0513/checkpoint/final.pt')
+    arg_parser.add_argument("--device", type=str, default='cuda:3')
     args = arg_parser.parse_args()
-    args.block_size = args.sr
     return args
 
 
 if __name__ == "__main__":
     setup_seed()
     args = get_args()
+
+    generated_audio_dir = join(args.output_dir,'generated_audio')
+    for d in [args.output_dir,generated_audio_dir]:
+        mkdir(d)
+    save_json(vars(args),join(args.output_dir,'args.json'))
 
     logger = Logger(join(args.output_dir,'log.txt'))
     if isfile(args.checkpoint_path):
@@ -37,10 +41,8 @@ if __name__ == "__main__":
     logger.log(str(model))
 
     args.sr = model.sr
-    generated_audio_dir = join(args.output_dir,'generated_audio')
-    for d in [args.output_dir,generated_audio_dir]:
-        mkdir(d)
-    save_json(vars(args),join(args.output_dir,'args.json'))
+    args.block_size = args.sr
+
 
     logger.log(f'Loading {args.audio_dir}...')
     dataset = MyDataset(args.audio_dir,args.sr,args.block_size,args.seq_length)
