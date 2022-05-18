@@ -9,6 +9,7 @@ import musicForum.utils.Result;
 import musicForum.vo.param.login;
 import musicForum.vo.param.register;
 import musicForum.vo.result.LoginBack;
+import musicForum.vo.result.userDetailReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,10 @@ import java.util.Date;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
-    @Value("${user.default-avator}")
-    private String dafaultAvatorPath;
+    @Value("${user.default-avatar}")
+    private String dafaultAvatarPath;
+    @Value("${user.avatar-parent-path}")
+    private String userAvatarParentPath;
 
     public Result login(login loginParam) {
         String account = loginParam.getAccount();
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
             //没有找到，可以正常注册
             Date date = new Date();
             musicForum.bean.users user_create = new users();
-            user_create.setCreate_date(date);
+            user_create.setCreateTime(date);
             user_create.setAccount(account);
             user_create.setNickname(nickname);
             user_create.setPassword(pwd);
@@ -65,7 +68,7 @@ public class UserServiceImpl implements UserService {
             //可能需要单独处理show
             user_create.setShow(0);
             //单独处理头像,单独写一个方法,七牛云服务器
-            user_create.setAvator(dafaultAvatorPath);
+            user_create.setAvatar(dafaultAvatarPath);
             userMapper.insert(user_create);
             return Result.success(null);
         }else {
@@ -75,16 +78,46 @@ public class UserServiceImpl implements UserService {
         }
     }
     public Result detail(Long id){
-        users users = userMapper.selectById(id);
-        if(users!=null){
-            return Result.success(users);
+        users user = userMapper.selectById(id);
+        if(user!=null){
+            //转成userDetailReturn后返回
+            userDetailReturn detail = userToDetailVo(user);
+            return Result.success(detail);
         }else {
             return Result.fail(ErrorCode.ACCOUNT_PWD_NOT_EXIST.getCode(),
                     ErrorCode.ACCOUNT_PWD_NOT_EXIST.getMsg());
         }
     }
+    public userDetailReturn userToDetailVo(users user){
+        userDetailReturn detail = new userDetailReturn();
+        detail.setAccount(user.getAccount());
+        detail.setAvatar(userAvatarParentPath+user.getAvatar());
+        detail.setCreateTime(user.getCreateTime());
+        detail.setNickname(user.getNickname());
+        detail.setPhone(user.getPhone());
+        detail.setBirthday(user.getBirthday());
+        detail.setEmail(user.getEmail());
+        detail.setSex(user.getSex());
+        detail.setId(user.getId());
+        detail.setIntroduction(user.getIntroduction());
+        return detail;
+    }
+
+    /**
+     * 可以添加对user的检查，检查各个字段是否符合规范
+     * @param user
+     * @return
+     */
     public Result modify(users user){
-        //协商返回什么，这里先不返回
+        if(user.getEmail()!=null) {
+            String tegex="[a-zA-Z0-9_]+@\\w+(\\.com|\\.cn){1}";
+            boolean flag = user.getEmail().matches(tegex);
+            if (!flag) {
+                System.out.println("邮箱格式有误");
+                return Result.fail(ErrorCode.EMAIL_ERROR.getCode(),
+                        ErrorCode.EMAIL_ERROR.getMsg());
+            }
+        }
         int i = userMapper.updateById(user);
         if(i==1){
             return Result.success(null);

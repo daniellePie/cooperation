@@ -22,13 +22,13 @@ import java.util.Map;
 @Service
 public class MusicUpdateServiceImple implements MusicUpdateService {
     @Autowired
-    MusicUploadMapper musicUploadMapper;
+    private MusicUploadMapper musicUploadMapper;
     @Autowired
-    MusicFavoriteMapper musicFavoriteMapper;
+    private MusicFavoriteMapper musicFavoriteMapper;
     @Autowired
-    MusicLikeMapper musicLikeMapper;
+    private MusicLikeMapper musicLikeMapper;
     @Autowired
-    MusicCommentMapper musicCommentMapper;
+    private MusicCommentMapper musicCommentMapper;
 
     public Result comment(Long userId, Long audioId, Long parentId, String myComment){
         musicComment comment = new musicComment();
