@@ -38,55 +38,52 @@
 		</v-card>
 
 			
-		<v-card height="100%" >
-			<v-row
-				class="fill-height "
-				no-gutters
+		<!-- <v-card height="100%" > -->
+			<v-row class="mt-2 mr-2" height="100%"
 			>
-				<v-navigation-drawer
-					v-model="drawer"
-					:mini-variant.sync="mini"
-					permanent
-				>
-					<v-list-item class="px-2">
-					<v-list-item-avatar>
-							<v-img :src="info.img"></v-img>
-						</v-list-item-avatar>
-			
-						<v-list-item-title class="font-weight-medium text-h6">{{info.name}}</v-list-item-title>
+					<v-navigation-drawer
+						v-model="drawer"
+						:mini-variant.sync="mini"
+						permanent
+					>
+						<v-list-item class="px-2">
+						<v-list-item-avatar>
+								<v-img :src="info.img"></v-img>
+							</v-list-item-avatar>
+				
+							<v-list-item-title class="font-weight-medium text-h6">{{info.name}}</v-list-item-title>
 
-						<v-btn
-							icon
-							@click.stop="mini = !mini"
-						>
-							<v-icon>mdi-chevron-left</v-icon>
-						</v-btn>
-					</v-list-item>
-			
-					<v-divider></v-divider>
-			
-					<v-list flat>
-						<v-list-item
-							v-for="item in items"
-							:key="item.title"
-							@click="det(item.title)"
-						>
-							<v-list-item-icon>
-								<v-icon>{{ item.icon }}</v-icon>
-							</v-list-item-icon>
-			
-							<v-list-item-content >
-								<v-list-item-title class="font-weight-medium text-h6">{{ item.title }}</v-list-item-title>
-							</v-list-item-content>
+							<v-btn
+								icon
+								@click.stop="mini = !mini"
+							>
+								<v-icon>mdi-chevron-left</v-icon>
+							</v-btn>
 						</v-list-item>
-					</v-list>
-				</v-navigation-drawer>
-
+				
+						<v-divider></v-divider>
+				
+						<v-list flat>
+							<v-list-item
+								v-for="item in items"
+								:key="item.title"
+								@click="det(item.title)"
+							>
+								<v-list-item-icon>
+									<v-icon>{{ item.icon }}</v-icon>
+								</v-list-item-icon>
+				
+								<v-list-item-content >
+									<v-list-item-title class="font-weight-medium text-h6">{{ item.title }}</v-list-item-title>
+								</v-list-item-content>
+							</v-list-item>
+						</v-list>
+					</v-navigation-drawer>
 				
 
-				<v-col>
+				<v-col class="justify-center">
 					<!-- 开始内容，不在这个col外写东西 -->
-						<v-container class="flex-column" justify="center">
+						<v-div class= "ma-4" >
 							
 							<!-- title -->
 							<v-row justify="center">
@@ -95,39 +92,41 @@
 
 							<!-- mainworkspace -->
 								<!-- keyboard-->
-							<v-row class=" d-flex justify-center mb-6">
-								<v-col cols="12" sm="4" class="d-flex justify-center mb-6"><v-btn>play</v-btn></v-col>
-								<v-col cols="12" sm="4" class="d-flex justify-center mb-6"><v-btn @click="add_track">+</v-btn></v-col>
-								<v-col cols="12" sm="4" class="d-flex justify-center mb-6"><v-btn @click="redu_track">-</v-btn></v-col>
-							</v-row>
+							<v-row>
+							<v-col cols="12" sm="6">
+								<v-row class=" d-flex justify-center ma-2">
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn>play</v-btn></v-col>
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="add_track">+</v-btn></v-col>
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="redu_track">-</v-btn></v-col>
+								</v-row>
 
-							<v-row 
-								class="7 d-flex justify-center mb-6" 
-								justify="center"
-								>
-								<v-card 
-									class="justify-center mb-6"
-									justify="center">
-									<canvas
-										class="d-flex justify-center mb-6"
-										v-for="i in this.num"
-										:id="get_canvas_id(i-1)"
-										height="50"
-										width="800"
-										style="background:#c1c1c1;"
-										@click="getSelect($event)"
-										>
-									</canvas>
-								</v-card>
-							</v-row>
+								<v-row 
+									class="7 d-flex justify-center ma-2" 
+									justify="center"
+									>
+									<v-card 
+										class="justify-center ma-2"
+										justify="center">
+										<canvas
+											class="d-flex justify-center ma-2"
+											v-for="i in this.num"
+											:id="get_canvas_id(i-1)"
+											height="50"
+											width="800"
+											style="background:#c1c1c1;"
+											@click="getSelect($event)"
+											>
+										</canvas>
+									</v-card>
+								</v-row>
 									<!-- <h1>{{mouse_x}} {{mouse_y}}</h1> -->
-							
+							</v-col>
 
-
-							<v-row class="d-flex justify-center mb-6">
+							<v-col cols="12" sm="6">
+							<v-row class="d-flex justify-center ma-2">
 								<v-card >
 									<v-row
-										class="d-flex justify-center mb-6"
+										class="d-flex justify-center ma-2"
 										cols="12"
 										sm="12"
 										justify="center"
@@ -140,7 +139,7 @@
 										
 
 										<v-col
-											class="d-flex justify-center mb-6"
+											class="d-flex justify-center ma-2"
 											cols="12"
 											sm="10"
 										>
@@ -153,7 +152,7 @@
 										</v-col>
 										
 										<v-col
-											class="d-flex justify-center mb-6"
+											class="d-flex justify-center ma-2"
 											cols="12"
 											sm="10"
 										>
@@ -166,7 +165,7 @@
 										</v-col>
 
 										<v-col
-											class="d-flex justify-center mb-6"
+											class="d-flex justify-center ma-2"
 											cols="12"
 											sm="4"
 										>
@@ -174,7 +173,7 @@
 										</v-col>
 
 										<v-col
-											class="d-flex justify-center mb-6"
+											class="d-flex justify-center ma-2"
 											cols="12"
 											sm="4"
 										>
@@ -183,6 +182,9 @@
 
 									</v-row>
 								</v-card>
+							</v-row>
+							</v-col>
+
 							</v-row>
 
 							<v-row class="d-flex">
@@ -197,7 +199,7 @@
 
 							
 
-						</v-container>
+						</v-div>
 					<!-- 结束内容，不在这个col外写东西 -->
 				</v-col >
 				
@@ -205,7 +207,7 @@
 
 			</v-row>
 		</v-card>
-	</v-card>
+	<!-- </v-card> -->
 	<!-- </v-container> -->
 
 </template>
@@ -428,7 +430,7 @@ export default {
 			// console.log(context)
 
 			context.beginPath()
-			context.fillStyle="yellow"
+			context.fillStyle="#6dcbff"
 			context.rect(loc*(canvas.width/32), 0, length*(canvas.width/32), 50)
 			context.fill()
 		},
