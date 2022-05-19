@@ -1,6 +1,7 @@
 <template class="basil">
-	<v-card height="100%">
-		<v-card class="overflow-hidden">
+	<v-card height="100%" >
+	<!-- <v-container> -->
+		<v-card class=" overflow-hidden " >
 			<v-app-bar
 				absolute
 				color="#fcb69f"
@@ -37,9 +38,9 @@
 		</v-card>
 
 			
-		<v-card height="100%">
+		<v-card height="100%" >
 			<v-row
-				class="fill-height"
+				class="fill-height "
 				no-gutters
 			>
 				<v-navigation-drawer
@@ -83,9 +84,9 @@
 
 				
 
-				<v-col >
+				<v-col>
 					<!-- 开始内容，不在这个col外写东西 -->
-						<v-container>
+						<v-container class="flex-column" justify="center">
 							
 							<!-- title -->
 							<v-row justify="center">
@@ -93,39 +94,108 @@
 							</v-row>
 
 							<!-- mainworkspace -->
-							<v-row justify="center">
 								<!-- keyboard-->
-								<v-col 
-									aligh="center" justify="space-around"
-									>
-									<v-card ref="trace_card">
-										<canvas 
-											v-for="i in this.num"
-											:id="get_canvas_id(i-1)"
-											height="50"
-											width="800"
-											style="background:#c1c1c1;"
-											@click="getSelect($event)"
-											>
-										</canvas>
-
-										<h1>{{mouse_x}} {{mouse_y}}</h1>
-										
-										<v-btn>+</v-btn>
-									</v-card>
-								</v-col>
+							<v-row class=" d-flex justify-center mb-6">
+								<v-col cols="12" sm="4" class="d-flex justify-center mb-6"><v-btn>play</v-btn></v-col>
+								<v-col cols="12" sm="4" class="d-flex justify-center mb-6"><v-btn @click="add_track">+</v-btn></v-col>
+								<v-col cols="12" sm="4" class="d-flex justify-center mb-6"><v-btn @click="redu_track">-</v-btn></v-col>
 							</v-row>
+
+							<v-row 
+								class="7 d-flex justify-center mb-6" 
+								justify="center"
+								>
+								<v-card 
+									class="justify-center mb-6"
+									justify="center">
+									<canvas
+										class="d-flex justify-center mb-6"
+										v-for="i in this.num"
+										:id="get_canvas_id(i-1)"
+										height="50"
+										width="800"
+										style="background:#c1c1c1;"
+										@click="getSelect($event)"
+										>
+									</canvas>
+								</v-card>
+							</v-row>
+									<!-- <h1>{{mouse_x}} {{mouse_y}}</h1> -->
 							
-							<v-row>
-								<v-app-bar
-									elevation="4"
+
+
+							<v-row class="d-flex justify-center mb-6">
+								<v-card >
+									<v-row
+										class="d-flex justify-center mb-6"
+										cols="12"
+										sm="12"
+										justify="center"
 									>
-									<h1>clip 属性列表</h1>
+										<h1>修改音乐片段属性</h1>
+									</v-row>
 									
-									<h1>sel={{sel}}</h1>
-								</v-app-bar> 
+									<v-row justify="center">
+									
+										
+
+										<v-col
+											class="d-flex justify-center mb-6"
+											cols="12"
+											sm="10"
+										>
+											<v-select
+												:items="clip_id_list"
+												label="音乐片段id"
+												@change="clip_id_change($event)"
+												:value="sel_value_id"
+											></v-select>
+										</v-col>
+										
+										<v-col
+											class="d-flex justify-center mb-6"
+											cols="12"
+											sm="10"
+										>
+											<v-text-field
+												label="时长"
+												placeholder="音乐片段的时长片数"
+												@change="clip_len_change($event)"
+												:value="sel_value_len"
+											></v-text-field>
+										</v-col>
+
+										<v-col
+											class="d-flex justify-center mb-6"
+											cols="12"
+											sm="4"
+										>
+											<v-btn @click="add_clips()">添加</v-btn>
+										</v-col>
+
+										<v-col
+											class="d-flex justify-center mb-6"
+											cols="12"
+											sm="4"
+										>
+											<v-btn @click="redu_clips()">删除</v-btn>
+										</v-col>
+
+									</v-row>
+								</v-card>
 							</v-row>
 
+							<v-row class="d-flex">
+								<h1>clip 属性列表</h1>
+									
+								<h1>sel={{sel}}</h1>
+
+								<h1>{{track}}</h1>
+
+								<h1>{{num}}</h1>
+							</v-row>
+
+							
 
 						</v-container>
 					<!-- 结束内容，不在这个col外写东西 -->
@@ -136,6 +206,7 @@
 			</v-row>
 		</v-card>
 	</v-card>
+	<!-- </v-container> -->
 
 </template>
 
@@ -150,7 +221,7 @@ export default {
 		for (var i=0; i<this.num; i++){
 			this.track.push({})
 			this.track[i]["id"] = "myCanvas_"+i
-			this.track[i]["clips"] = [{"id":"123","loc":i,"len":i+1}]
+			this.track[i]["clips"] = []
 			this.draw(this.track[i]["id"])
 
 		}
@@ -184,10 +255,17 @@ export default {
 				"len":0,
 			},
 
+			clip_id_list:[
+				"do",
+				"re",
+				"mi"
+			],
+
+			sel_value_len:1,
+			sel_value_id:"",
 
 			mouse_x:0,
 			mouse_y:0,
-			ctx:{}
     }
   },
 
@@ -210,12 +288,38 @@ export default {
 	  };
   	},
 
-		print_btn_toggle(){
-			console.log(this.toggle_exclusive)
+		async add_track(){
+			await this.add_track_foo()
+			console.log(this.num)
+			this.draw_a()
+		},
+
+		add_track_foo(){
+			this.track.push({})
+			this.track[this.num]["id"] = "myCanvas_"+this.num
+			this.track[this.num]["clips"] = []
+			this.num = this.num+1
+		},
+
+		async redu_track(){
+			await this.redu_track_foo()
+			console.log(this.num)
+			this.draw_a()
+		},
+
+		redu_track_foo(){
+			this.track.pop()
+			this.num = this.num-1
+		},
+
+		async getSelect(e){
+			await this.getSelect_foo(e)
+			this.sel_value_len=this.sel["len"]
+			this.sel_value_id=this.sel["id"]
 		},
 
 		// @click="getMouseXY($event)"
-		getSelect(e){
+		getSelect_foo(e){
 			this.mouse_x = e.x //获取鼠标的X坐标（鼠标与屏幕左侧的距离，单位为px
 			this.mouse_y = e.y //获取鼠标的Y坐标（鼠标与屏幕顶部的距离，单位为px
 
@@ -232,7 +336,7 @@ export default {
 			var index = this.get_index_from_id(canvas_id)
 			var clips  = this.track[index]["clips"]
 			for (var i=0; i<clips.length; i++){
-				if (loc-clips[i]["loc"] < clips[i]["len"]){
+				if (loc-clips[i]["loc"] < clips[i]["len"] && loc-clips[i]["loc"] >= 0){
 					this.sel["clips_index"]=i
 					this.sel["id"] = clips[i]["id"]
 					this.sel["loc"] = clips[i]["loc"]
@@ -241,9 +345,54 @@ export default {
 				}
 			}
 
+
 			this.draw_a()
 
 		},
+
+
+		async add_clips(){
+			await this.add_clips_foo()
+			console.log(this.track)
+			this.draw_a()
+		},
+
+		add_clips_foo(){
+			var canvas_index = this.get_index_from_id(this.sel["canvas_id"])
+			var exist = this.get_clip_exist(canvas_index)
+			if(exist == -1){
+				console.log("checking",this.sel_value_id,this.sel_value_len)
+				this.sel["id"] = this.sel_value_id
+				this.sel["len"] = this.sel_value_len
+				this.track[canvas_index]["clips"].push(
+					{"id":this.sel_value_id, "len":this.sel_value_len, "loc":this.sel["loc"]}
+					)
+			}else{
+				console.log("nooooo")
+			}
+		},
+
+		async redu_clips(){
+			await this.redu_clips_foo()
+			console.log(this.track)
+			this.draw_a()
+		},
+
+		redu_clips_foo(){
+			var canvas_index = this.get_index_from_id(this.sel["canvas_id"])
+			var exist = this.get_clip_exist(canvas_index)
+			if(exist != -1){
+				this.track[canvas_index]["clips"].splice(exist)
+				this.sel_value_id=""
+				this.sel_value_len=1
+				this.sel["id"]=""
+				this.sel["len"]=1
+			}else{
+				console.log("nooooo")
+			}
+		},
+
+
 
 		
 
@@ -259,12 +408,16 @@ export default {
 			
 			for (var i=1; i<=31; i++){
 				context.lineWidth=2
-				context.strokeStyle = "red"
+				context.strokeStyle = "black"
 				context.beginPath()
 				context.moveTo(i/32*canvas.width, 0)
 				context.lineTo(i/32*canvas.width, 50)
 				context.stroke()
 			}
+			// context.beginPath()
+			// context.rect(0,0,canvas.width,50)
+			// context.stroke()
+
 		},
 
 
@@ -311,6 +464,7 @@ export default {
 			// console.log()
 		},
 
+
 		draw_a(){
 			for (var i=0; i<this.num; i++){
 				this.draw(this.track[i]["id"])
@@ -330,6 +484,25 @@ export default {
 			}
 			return -1
 		},
+
+		get_clip_exist(canvas_index){
+			var clips = this.track[canvas_index]["clips"]
+			for (var i=0;i <clips.length;i++){
+				if (clips[i]["loc"] == this.sel["loc"])
+					return i
+			}
+			return -1
+		},
+
+		clip_id_change(e){
+			this.sel_value_id = e
+		},
+
+		clip_len_change(e){
+			this.sel_value_len=e
+		}
+
+
 
   },
 };
