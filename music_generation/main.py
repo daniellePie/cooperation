@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from email.errors import HeaderParseError
 from os.path import isdir, join, isfile
 from dataset.dataset import MyDataset
 import torch
@@ -13,8 +14,8 @@ from utils.utils import Logger, mkdir, save_json, setup_seed
 
 def get_args():
     arg_parser = ArgumentParser()
-    arg_parser.add_argument("--audio_dir", type=str, default='data_train')
-    arg_parser.add_argument("--sr", type=int, default=16000)
+    arg_parser.add_argument("--audio_dir", type=str, default='data_train', help=".wav files should be placed here")
+    arg_parser.add_argument("--sr", type=int, default=16000, help="Sampling rate for audio")
     arg_parser.add_argument("--seq_length", type=int, default=10, help="The length of start of music, unit:second(s)")
     arg_parser.add_argument("--batch_size", type=int, default=128)
     arg_parser.add_argument("--output_dir", type=str, default='result_train/0513')

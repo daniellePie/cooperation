@@ -10,7 +10,7 @@ from utils.utils import Logger, mkdir, save_json, setup_seed
 
 def get_args():
     arg_parser = ArgumentParser()
-    arg_parser.add_argument("--audio_dir", type=str, default='data_inference')
+    arg_parser.add_argument("--audio_dir", type=str, default='data_inference', help=".wav files should be placed here")
     arg_parser.add_argument("--num_prediction", type=int, default=60, help="How many seconds to generate")
     arg_parser.add_argument("--batch_size", type=int, default=16)
     arg_parser.add_argument("--seq_length", type=int, default=10, help="The length of start of music, unit:second(s)")
