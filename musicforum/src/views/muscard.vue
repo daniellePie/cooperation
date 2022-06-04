@@ -36,10 +36,18 @@
                 <v-expand-transition>
                   <div v-show="item.comment">
                      <v-divider></v-divider>
+                    <!--其他人发表的评论-->
+                    <v-vol v-for="(cmt, j) in item.comments" :key="j">
+                    <v-list-item two-line>
+                    <v-list-item-content>
+                    <v-list-item-title>{{cmt.id}}</v-list-item-title>
+                    <v-list-item-subtitle>{{cmt.content}}</v-list-item-subtitle>
+                    </v-list-item-content>
+                    </v-list-item>
+                    </v-vol>
                     <v-card-text>
                        发表你的评论
                     </v-card-text>
-                    <!--还没加其他人发表的评论-->
                     <v-form>
                       <v-col>
                     <v-textarea clearable clear-icon="mdi-close-circle" label="Text"></v-textarea>
@@ -77,6 +85,15 @@
           playing:false,
           comment:false,
           star: false,
+          comments:[{
+            id: 'Vocalnooo',
+            content: '迷曲好听, 令人着迷'
+          },
+          {
+            id: '3Racha',
+            content: 'Good job'
+          }
+          ]
         },
         {
           img: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
@@ -88,6 +105,11 @@
           playing:false,
           comment:false,
           star: false,
+          comments:[{
+            id: 'o.o',
+            content: 'It is a beautiful song.'
+          },
+          ]
         },
         {
           img: 'https://y.qq.com/music/photo_new/T002R150x150M000000cGypg4Ij15R.jpg?max_age=2592000',
