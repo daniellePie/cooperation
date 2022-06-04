@@ -727,6 +727,8 @@ export default {
 		// clip id改变
 		clip_id_change(e){
 			this.sel_value_id = e;
+			// this.set_value_len_s = e;
+			this.sel_value_len=Math.ceil(this.sel_value_len_s/this.track_clip_length);
 		},
 
 		// clip 音乐长度改变
@@ -795,7 +797,7 @@ export default {
 			this.select_clip["len_s"]=1;
 			this.sel_value_id="";
 			this.sel_value_len=1;
-			this.sel_value_len_s=1;
+			this.sel_value_len_s=1.0;
 		},
 
 		// 生成音乐 
