@@ -95,9 +95,46 @@
 							<v-row>
 							<v-col cols="12" sm="6">
 								<v-row class=" d-flex justify-center ma-2">
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn>play</v-btn></v-col>
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="add_track">+</v-btn></v-col>
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="redu_track">-</v-btn></v-col>
+									<h1>Track</h1>
+								</v-row>
+								<v-row class=" d-flex justify-center ma-2">
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="generate_music()">play</v-btn></v-col>
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="add_track()">+</v-btn></v-col>
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="redu_track()">-</v-btn></v-col>
+								</v-row>
+
+								<v-row class=" d-flex justify-center ma-2">
+									<v-col cols="12" sm="12" class="d-flex justify-center ma-1"><h3 >修改音轨属性信息</h3></v-col>
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2">
+										<v-text-field
+											label="时间片单位长度/s"
+											placeholder="每个时间片代表的时间长度，默认为1s"
+											@change="track_clip_length_change($event)"
+											:value="track_clip_length"
+										></v-text-field>
+									</v-col>
+
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2	">
+										<v-text-field
+											label="时间片数量"
+											placeholder="每个音轨包含的时间片数量，默认为32"
+											@change="track_clip_num_change($event)"
+											:value="track_clip_num"
+										></v-text-field>
+									</v-col>
+
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2	" >
+										<v-list-item  two-line >
+											<v-list-item-content>
+												<v-list-item-title>注意：</v-list-item-title>
+												<v-list-item-subtitle>修改音轨属性会清空音轨内容</v-list-item-subtitle>
+											</v-list-item-content>
+										</v-list-item>
+									</v-col>
+									<h3>{{select_clip}}</h3>
+									<h3>{{track}}</h3>
+									<h3>len {{sel_value_len}} lens {{sel_value_len_s}}</h3>
+
 								</v-row>
 
 								<v-row 
@@ -109,10 +146,10 @@
 										justify="center">
 										<canvas
 											class="d-flex justify-center ma-2"
-											v-for="i in this.num"
+											v-for="i in this.track_num"
 											:id="get_canvas_id(i-1)"
 											height="50"
-											width="800"
+											width="600"
 											style="background:#c1c1c1;"
 											@click="getSelect($event)"
 											>
@@ -120,81 +157,152 @@
 									</v-card>
 								</v-row>
 									<!-- <h1>{{mouse_x}} {{mouse_y}}</h1> -->
+								<h2>{{post_list}}</h2>
 							</v-col>
 
 							<v-col cols="12" sm="6">
-							<v-row class="d-flex justify-center ma-2">
-								<v-card >
-									<v-row
-										class="d-flex justify-center ma-2"
-										cols="12"
-										sm="12"
-										justify="center"
-									>
-										<h1>修改音乐片段属性</h1>
-									</v-row>
-									
-									<v-row justify="center">
-									
+								<v-row class="d-flex justify-center ma-5">
+									<v-card width="100%">
+										<v-row
+											class="d-flex justify-center ma-2"
+											cols="12"
+											sm="12"
+											justify="center"
+										>
+											<h1>修改音乐片段属性</h1>
+										</v-row>
 										
+										<v-row justify="center">
+											<v-col
+												class="d-flex justify-center ma-2"
+												cols="12"
+												sm="10"
+											>
+												<v-select
+													:items="clip_id_list"
+													label="音乐片段id"
+													@change="clip_id_change($event)"
+													v-model="sel_value_id"
+												></v-select>
+											</v-col>
+											
+											<v-col
+												class="d-flex justify-center ma-2"
+												cols="12"
+												sm="10"
+											>
+												<v-text-field
+													label="时长/s"
+													placeholder="音乐片段的插入时长"
+													@change="clip_len_change($event)"
+													v-model="sel_value_len_s"
+												></v-text-field>
+											</v-col>
 
-										<v-col
-											class="d-flex justify-center ma-2"
-											cols="12"
-											sm="10"
-										>
-											<v-select
-												:items="clip_id_list"
-												label="音乐片段id"
-												@change="clip_id_change($event)"
-												:value="sel_value_id"
-											></v-select>
-										</v-col>
+											<v-col
+												class="d-flex justify-center ma-2"
+												cols="12"
+												sm="3"
+											>
+												<v-btn @click="add_clips()">添加</v-btn>
+											</v-col>
+
+											<v-col
+												class="d-flex justify-center ma-2"
+												cols="12"
+												sm="3"
+											>
+												<v-btn @click="edit_clips()">修改</v-btn>
+											</v-col>
+
+											<v-col
+												class="d-flex justify-center ma-2"
+												cols="12"
+												sm="3"
+											>
+												<v-btn @click="redu_clips()">删除</v-btn>
+											</v-col>
+
+										</v-row>
+									</v-card>
+								</v-row>
+
+								<!-- current music piece infomation-->
+								<v-row class="d-flex justify-center ma-5">
+									<v-card width="100%">
+
 										
-										<v-col
+										<v-row
 											class="d-flex justify-center ma-2"
 											cols="12"
-											sm="10"
+											sm="12"
+											justify="center"
 										>
-											<v-text-field
-												label="时长"
-												placeholder="音乐片段的时长片数"
-												@change="clip_len_change($event)"
-												:value="sel_value_len"
-											></v-text-field>
-										</v-col>
+											<h1>音乐片段查询</h1>
+										</v-row>
+										
+										<v-row justify="center">
+											<v-col
+												class="d-flex justify-center ma-2"
+												cols="12"
+												sm="10"
+											>
+												<v-select
+													:items="clip_id_list"
+													label="音乐片段id"
+													@change="cur_id_change($event)"
+													:value="cur_id"
+												></v-select>
+											</v-col>
+											
+											<v-col
+												class="d-flex justify-center ma-5"
+												cols="12"
+												sm="10"
+											>
+												<v-list-item  two-line>
+													<v-list-item-content>
+														<v-list-item-title>音乐作品id</v-list-item-title>
+														<v-list-item-subtitle>{{cur_id}}</v-list-item-subtitle>
+													</v-list-item-content>
+												</v-list-item>
 
-										<v-col
-											class="d-flex justify-center ma-2"
-											cols="12"
-											sm="4"
-										>
-											<v-btn @click="add_clips()">添加</v-btn>
-										</v-col>
+												<v-list-item  two-line>
+													<v-list-item-content>
+														<v-list-item-title>音乐作品名称</v-list-item-title>
+														<v-list-item-subtitle>{{cur_audioName}}</v-list-item-subtitle>
+													</v-list-item-content>
+												</v-list-item>
 
-										<v-col
-											class="d-flex justify-center ma-2"
-											cols="12"
-											sm="4"
-										>
-											<v-btn @click="redu_clips()">删除</v-btn>
-										</v-col>
+												<v-list-item  two-line>
+													<v-list-item-content>
+														<v-list-item-title>音乐作品时长/s</v-list-item-title>
+														<v-list-item-subtitle>{{cur_duration}}</v-list-item-subtitle>
+													</v-list-item-content>
+												</v-list-item>
 
-									</v-row>
-								</v-card>
-							</v-row>
+											</v-col>
+											<v-col
+												class="d-flex justify-center ma-5"
+												cols="12"
+												sm="10"
+											>
+												<v-list-item  two-line>
+													<v-list-item-content>
+														<v-list-item-title>音乐作品描述</v-list-item-title>
+														<v-list-item-subtitle>{{cur_description}}</v-list-item-subtitle>
+													</v-list-item-content>
+												</v-list-item>
+
+											</v-col>
+										</v-row>
+									</v-card>
+								</v-row>
+
+								<!-- <h1>{{music_list}}</h1> -->
+
 							</v-col>
 
-							</v-row>
-
-							<v-row class="d-flex">
-								<h1>clip 属性列表</h1>
-									
-								<h1>sel={{sel}}</h1>
-
-								<h1>{{track}}</h1>
-
-								<h1>{{num}}</h1>
 							</v-row>
 
 							
@@ -202,6 +310,9 @@
 						</v-div>
 					<!-- 结束内容，不在这个col外写东西 -->
 				</v-col >
+
+
+				
 				
 			
 
@@ -219,22 +330,41 @@
 
 export default {
 	mounted() {
-		console.log(this.track)
-		for (var i=0; i<this.num; i++){
-			this.track.push({})
-			this.track[i]["id"] = "myCanvas_"+i
-			this.track[i]["clips"] = []
-			this.draw(this.track[i]["id"])
+		// console.log(this.track)
+		// 音轨初始化
+		for (var i=0; i<this.track_num; i++){
+			this.track.push({});
+			this.track[i]["id"] = "myCanvas_"+i;
+			this.track[i]["clips"] = [];
+			this.draw(this.track[i]["id"]);
 
 		}
-		// console.log(this.track)
+
+		axios
+      .get('http://47.103.149.25:8081/music/musicInfo/infoForGenerate')
+      .then(response=>{
+				this.music_list = response.data.data;
+				// console.log(response)
+				for (var i=0; i<response.data.data.length; i++){
+					this.clip_id_list.push(response.data.data[i]["id"])
+				}
+			})
+			// .then(function (response) {
+    	// 	console.log(response);
+			// 	console.log(this.music_list);
+  		// })
+			.catch(function (error) {
+				console.log(error)
+			})
 	},
+
+	// info {name:'ymym', img:'https://i.ibb.co/H7vjrLr/3.jpg'}
 
   data () {
     return {
       drawer: true,
 			id:1,
-			info:{ name:'ymym', img:'https://i.ibb.co/H7vjrLr/3.jpg'},
+			info:{ name:'ymym'},
 				items: [
 					{ title: '首页', icon: 'mdi-home-city' },
 					{ title: '我的关注', icon: 'mdi-account' },
@@ -245,29 +375,58 @@ export default {
 				],
 				mini: true,
 				
-			// music track 
-			// mow only 4 track
-			num:3,
-			track: [],
-			sel:{
-				"canvas_id":"",
-				"clips_index":-1,
-				"id":"",
-				"loc":0,
-				"len":0,
+			// 音轨设置
+			track_clip_length:1,	// 音乐片单位长度
+			track_clip_num:32,	//	音乐片的数量
+			track_num:3,	// 音轨数量
+			track: [],		// 音轨内容
+			/*
+			track[i]["clips"]={
+				"id":	// 乐曲id
+				"len":	// 音乐片长度
+				"loc":	// 音乐片起始位置
+				"len_s":	// 音乐片长度
+			}
+			*/
+
+			// 当前选择的音乐片
+			select_clip:{
+				"canvas_id":"myCanvas_0",	// 所在的音轨
+				"clips_index":-1,	// clip位于自己所在的音轨音乐片列表的index
+				"id":"",	// 乐曲 id
+				"loc":0,	// 位置
+				"len":0,	// 长度
+				"len_s":0,	// 长度，单位s
 			},
 
-			clip_id_list:[
-				"do",
-				"re",
-				"mi"
-			],
+			// 从数据库获取的音乐片id
+			clip_id_list:[],
+			// 从数据库获得的音乐片段的全部信息
+			music_list:null,
 
-			sel_value_len:1,
-			sel_value_id:"",
+			// 修改clip属性的变量
+			sel_value_len_s:1,	// 默认时间长度 s
+			sel_value_len:1,	// 默认长度
+			sel_value_id:"",	// 默认乐曲id
 
+			// 鼠标点击位置
 			mouse_x:0,
 			mouse_y:0,
+
+			// 查询乐曲的信息
+			cur_id:null,
+			cur_savePath:null,
+			cur_duration:null,
+			cur_authorName:null,
+			cur_audioName:null,
+			cur_description:null,
+
+
+			// 提交list
+			post_list:[],
+
+			// 音乐地址
+			music_url:"",
     }
   },
 
@@ -285,6 +444,8 @@ export default {
 		this.$router.push({path:'/hotaudio',query:{'id':this.id}})
 	  } else if (title == '个人中心') {
 		this.$router.push({path:'/myself',query:{'id':this.id}})
+		} else if (title == '创作中心') {
+  	this.$router.push({path:'/workspace',query:{'id':this.id}})
 	  } else {
 		this.$router.push({path:'/settings',query:{'id':this.id}})
 	  };
@@ -292,57 +453,66 @@ export default {
 
 		async add_track(){
 			await this.add_track_foo()
-			console.log(this.num)
+			console.log(this.track_num)
 			this.draw_a()
 		},
 
 		add_track_foo(){
 			this.track.push({})
-			this.track[this.num]["id"] = "myCanvas_"+this.num
-			this.track[this.num]["clips"] = []
-			this.num = this.num+1
+			this.track[this.track_num]["id"] = "myCanvas_"+this.track_num
+			this.track[this.track_num]["clips"] = []
+			this.track_num = this.track_num+1
 		},
 
 		async redu_track(){
 			await this.redu_track_foo()
-			console.log(this.num)
+			console.log(this.track_num)
 			this.draw_a()
 		},
 
 		redu_track_foo(){
 			this.track.pop()
-			this.num = this.num-1
+			this.track_num = this.track_num-1
 		},
 
+
+		// 处理位于音轨上的点击，主要用来选择音乐片
 		async getSelect(e){
 			await this.getSelect_foo(e)
-			this.sel_value_len=this.sel["len"]
-			this.sel_value_id=this.sel["id"]
+			this.sel_value_len=this.select_clip["len"]
+			this.sel_value_len_s=this.select_clip["len_s"]
+			this.sel_value_id=this.select_clip["id"]
 		},
-
 		// @click="getMouseXY($event)"
+		// 处理位于音轨上的点击，主要用来选择音乐片
 		getSelect_foo(e){
 			this.mouse_x = e.x //获取鼠标的X坐标（鼠标与屏幕左侧的距离，单位为px
 			this.mouse_y = e.y //获取鼠标的Y坐标（鼠标与屏幕顶部的距离，单位为px
-
+			
+			// 获取音轨
 			var canvas_id = e.target.id
-			this.sel["canvas_id"] = canvas_id
+			this.select_clip["canvas_id"] = canvas_id
 
+			// 获取音乐片位置
 			const canvas = document.getElementById(canvas_id)
-			var loc = Math.floor((this.mouse_x-canvas.getBoundingClientRect().x)/(canvas.width/32))
-			this.sel["loc"] = loc
+			var loc = Math.floor((this.mouse_x-canvas.getBoundingClientRect().x)/(canvas.width/this.track_clip_num))
+			this.select_clip["loc"] = loc
 
-			this.sel["id"]=""
-			this.sel["len"] = 1
-			this.sel["clips_index"]=-1
+			// 一点初始化
+			this.select_clip["id"]=""
+			this.select_clip["len"] = 1
+			this.select_clip["len_s"] = 1
+			this.select_clip["clips_index"]=-1
+			// this.select
 			var index = this.get_index_from_id(canvas_id)
 			var clips  = this.track[index]["clips"]
 			for (var i=0; i<clips.length; i++){
 				if (loc-clips[i]["loc"] < clips[i]["len"] && loc-clips[i]["loc"] >= 0){
-					this.sel["clips_index"]=i
-					this.sel["id"] = clips[i]["id"]
-					this.sel["loc"] = clips[i]["loc"]
-					this.sel["len"] = clips[i]["len"]
+					this.select_clip["clips_index"]=i
+					this.select_clip["id"] = clips[i]["id"]
+					this.select_clip["loc"] = clips[i]["loc"]
+					this.select_clip["len"] = clips[i]["len"]
+					this.select_clip["len_s"] = clips[i]["len_s"]
 					break
 				}
 			}
@@ -352,51 +522,108 @@ export default {
 
 		},
 
-
+		// 添加音乐片
 		async add_clips(){
-			await this.add_clips_foo()
-			console.log(this.track)
-			this.draw_a()
+			await this.add_clips_foo();
+			// console.log(this.track)
+			this.draw_a();
 		},
-
+		// 添加音乐片
 		add_clips_foo(){
-			var canvas_index = this.get_index_from_id(this.sel["canvas_id"])
-			var exist = this.get_clip_exist(canvas_index)
+			var canvas_index = this.get_index_from_id(this.select_clip["canvas_id"]);
+			var exist = this.get_clip_exist(canvas_index);
 			if(exist == -1){
-				console.log("checking",this.sel_value_id,this.sel_value_len)
-				this.sel["id"] = this.sel_value_id
-				this.sel["len"] = this.sel_value_len
-				this.track[canvas_index]["clips"].push(
-					{"id":this.sel_value_id, "len":this.sel_value_len, "loc":this.sel["loc"]}
-					)
+				// console.log("checking",this.sel_value_id,this.sel_value_len)
+				if (this.sel_value_id != ""){
+					if (this.select_clip["loc"] + this.sel_value_len <= this.track_clip_num){
+						var check = 0;
+						for (var i=0;i<this.track[canvas_index]["clips"].length;i++){
+							// console.log(i, this.select_clip["loc"]+this.sel_value_len, this.track[canvas_index]["clips"][i]["loc"]+1);
+							if ( this.select_clip["loc"] < this.track[canvas_index]["clips"][i]["loc"] &&
+								this.select_clip["loc"]+this.sel_value_len >= this.track[canvas_index]["clips"][i]["loc"]+1) {
+								// return 
+								check = 1;
+							}
+						}
+						if(check == 0){	
+							this.select_clip["id"] = this.sel_value_id;
+							this.select_clip["len"] = this.sel_value_len;
+							this.select_clip["len_s"] = this.sel_value_len_s;
+							this.track[canvas_index]["clips"].push(
+								{"id":this.sel_value_id, "len":this.sel_value_len, "len_s":this.sel_value_len_s, "loc":this.select_clip["loc"] }
+								);
+						}else{}
+					}else{}
+				}else{
+				}
 			}else{
-				console.log("nooooo")
+				// console.log("nooooo")
 			}
 		},
 
+		// 删除选中的音乐片
 		async redu_clips(){
-			await this.redu_clips_foo()
-			console.log(this.track)
-			this.draw_a()
+			await this.redu_clips_foo();
+			// console.log(this.track)
+			this.draw_a();
+		},
+		// 删除选中音乐片
+		redu_clips_foo(){
+			var canvas_index = this.get_index_from_id(this.select_clip["canvas_id"]);
+			var exist = this.get_clip_exist(canvas_index);
+			if(exist != -1){
+				console.log(exist);
+				this.track[canvas_index]["clips"].splice(exist, 1);
+				this.sel_value_id="";
+				this.sel_value_len=1;
+				this.sel_value_len_s=1;
+				this.select_clip["id"]="";
+				this.select_clip["len"]=1;
+				this.select_clip["len_s"]=1;
+			}else{
+				// console.log("nooooo")
+			}
 		},
 
-		redu_clips_foo(){
-			var canvas_index = this.get_index_from_id(this.sel["canvas_id"])
-			var exist = this.get_clip_exist(canvas_index)
+		// 修改音乐片
+		async edit_clips(){
+			await this.edit_clips_foo();
+			// console.log(this.track)
+			this.draw_a();
+		},
+		// 修改音乐片
+		edit_clips_foo(){
+			var canvas_index = this.get_index_from_id(this.select_clip["canvas_id"]);
+			var exist = this.get_clip_exist(canvas_index);
 			if(exist != -1){
-				this.track[canvas_index]["clips"].splice(exist)
-				this.sel_value_id=""
-				this.sel_value_len=1
-				this.sel["id"]=""
-				this.sel["len"]=1
+				// console.log("checking",this.sel_value_id,this.sel_value_len)
+				if (this.sel_value_id != ""){
+					if (this.select_clip["loc"] + this.sel_value_len <= this.track_clip_num){
+						var check = 0;
+						for (var i=0;i<this.track[canvas_index]["clips"].length;i++){
+							// console.log(i, this.select_clip["loc"]+this.sel_value_len, this.track[canvas_index]["clips"][i]["loc"]+1);
+							if ( this.select_clip["loc"] < this.track[canvas_index]["clips"][i]["loc"] &&
+								this.select_clip["loc"]+this.sel_value_len >= this.track[canvas_index]["clips"][i]["loc"]+1) {
+								// return 
+								check = 1;
+							}
+						}
+						if(check == 0){	
+							this.select_clip["id"] = this.sel_value_id;
+							this.select_clip["len"] = this.sel_value_len;
+							this.select_clip["len_s"] = this.sel_value_len_s;
+							this.track[canvas_index]["clips"][exist] = {"id":this.sel_value_id, "len":this.sel_value_len, "len_s":this.sel_value_len_s, "loc":this.select_clip["loc"] };
+						}else{}
+					}else{
+					}
+				}else{
+				}
 			}else{
-				console.log("nooooo")
+				// console.log("nooooo")
 			}
 		},
 
 
-
-		
 
 		basic_line(canvas_id){
 			const canvas = document.getElementById(canvas_id)
@@ -408,12 +635,12 @@ export default {
 			
 			context.globalAlpha = 1
 			
-			for (var i=1; i<=31; i++){
+			for (var i=1; i<=this.track_clip_num-1; i++){
 				context.lineWidth=2
 				context.strokeStyle = "black"
 				context.beginPath()
-				context.moveTo(i/32*canvas.width, 0)
-				context.lineTo(i/32*canvas.width, 50)
+				context.moveTo(i/this.track_clip_num*canvas.width, 0)
+				context.lineTo(i/this.track_clip_num*canvas.width, 50)
 				context.stroke()
 			}
 			// context.beginPath()
@@ -421,7 +648,6 @@ export default {
 			// context.stroke()
 
 		},
-
 
 		basic_rect(canvas_id, loc, length){
 			const canvas = document.getElementById(canvas_id)
@@ -431,21 +657,21 @@ export default {
 
 			context.beginPath()
 			context.fillStyle="#6dcbff"
-			context.rect(loc*(canvas.width/32), 0, length*(canvas.width/32), 50)
+			context.rect(loc*(canvas.width/this.track_clip_num), 0, length*(canvas.width/this.track_clip_num), 50)
 			context.fill()
 		},
 
 		
 
 		basic_sel(){
-			const canvas = document.getElementById(this.sel["canvas_id"])
+			const canvas = document.getElementById(this.select_clip["canvas_id"])
 			// console.log(canvas)
 			var context = canvas.getContext('2d')
 
 			context.lineWidth=3;
 			context.strokeStyle = "blue";
 			context.beginPath()
-			context.rect(this.sel["loc"]*(canvas.width/32), 0, this.sel["len"]*(canvas.width/32), 50)
+			context.rect(this.select_clip["loc"]*(canvas.width/this.track_clip_num), 0, this.select_clip["len"]*(canvas.width/this.track_clip_num), 50)
 			context.stroke()
 		},
 
@@ -468,44 +694,163 @@ export default {
 
 
 		draw_a(){
-			for (var i=0; i<this.num; i++){
+			for (var i=0; i<this.track_num; i++){
 				this.draw(this.track[i]["id"])
 			}
 			this.basic_sel()
 		},
 
-
+		// 通过索引获得 canvas id
 		get_canvas_id(index){
 			return "myCanvas_" +index
 		},
 
+		// canvas id 转换为 索引
 		get_index_from_id(canvas_id){
-			for (var i=0;i <this.num;i++){
+			for (var i=0;i <this.track_num;i++){
 				if (this.track[i]["id"] == canvas_id)
 					return i
 			}
 			return -1
 		},
 
+		// 获取选中位置在track的clip列表中是否存在clip，返回索引
 		get_clip_exist(canvas_index){
 			var clips = this.track[canvas_index]["clips"]
 			for (var i=0;i <clips.length;i++){
-				if (clips[i]["loc"] == this.sel["loc"])
+				if (clips[i]["loc"] == this.select_clip["loc"])
 					return i
 			}
 			return -1
 		},
 
+		// clip id改变
 		clip_id_change(e){
-			this.sel_value_id = e
+			this.sel_value_id = e;
 		},
 
+		// clip 音乐长度改变
 		clip_len_change(e){
-			this.sel_value_len=e
+			this.set_value_len_s = e;
+			this.sel_value_len=Math.ceil(e/this.track_clip_length);
+		},
+
+		// 查询窗口选择id
+		cur_id_change(e){
+			this.cur_id = e;
+			for (var i=0; i<this.music_list.length;i++){
+				if (this.music_list[i]["id"] == e){
+					this.cur_savePath = this.music_list[i]["savePath"];
+					this.cur_duration = this.music_list[i]["duration"];
+					this.cur_authorName = this.music_list[i]["authorName"];
+					this.cur_audioName = this.music_list[i]["audioName"];
+					this.cur_description = this.music_list[i]["description"];
+					break;
+				}
+			}
+		},
+
+		// 处理音轨单位长度
+		track_clip_length_change(e){
+			this.track_clip_length = e;
+			for (var i=0;i<this.track_num;i++){
+				this.track.pop();
+			}
+			for (var i=0; i<3; i++){
+				this.track.push({});
+				this.track[i]["id"] = "myCanvas_"+i;
+				this.track[i]["clips"] = [];
+				this.draw(this.track[i]["id"]);
+			}
+			this.track_num = 3;
+			this.select_clip["canvas_id"]="myCanvas_0";
+			this.select_clip["clips_index"]=-1;
+			this.select_clip["id"]="";
+			this.select_clip["loc"]=0;
+			this.select_clip["len"]=1;
+			this.select_clip["len_s"]=1;
+			this.sel_value_id="";
+			this.sel_value_len=1;
+			this.sel_value_len_s=1;
+		},
+
+		// 处理音轨clip数量
+		track_clip_num_change(e){
+			this.track_clip_num = e;
+			for (var i=0;i<this.track_num;i++){
+				this.track.pop();
+			}
+			for (var i=0; i<3; i++){
+				this.track.push({});
+				this.track[i]["id"] = "myCanvas_"+i;
+				this.track[i]["clips"] = [];
+				this.draw(this.track[i]["id"]);
+			}
+			this.track_num = 3;
+			this.select_clip["canvas_id"]="myCanvas_0";
+			this.select_clip["clips_index"]=-1;
+			this.select_clip["id"]="";
+			this.select_clip["loc"]=0;
+			this.select_clip["len"]=1;
+			this.select_clip["len_s"]=1;
+			this.sel_value_id="";
+			this.sel_value_len=1;
+			this.sel_value_len_s=1;
+		},
+
+		// 生成音乐 
+		async generate_music(){
+			await this.generate_music_foo();
+			if (this.post_list!=[]){
+				axios.post('http://47.103.149.25:8081/music/musicUpdate/generateMusic',this.post_list)
+				.then(function (response) {
+					console.log(response);
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+				}
+		},
+		// 生成请求列表
+		generate_music_foo(){
+
+			this.post_list = [];
+			var num = 0;
+
+			for (var i=0; i<this.track_num; i++){
+				this.post_list.push([]);
+				for (var j=0; j<this.track[i]["clips"].length; j++){
+					
+					this.post_list[i].push(
+						{
+							"id":this.track[i]["clips"][j]["id"],
+							"savePath":this.get_savePath_from_id(this.track[i]["clips"][j]["id"]),
+							"startTime":this.track[i]["clips"][j]["loc"]*this.track_clip_length,
+							"duration":this.track[i]["clips"][j]["len_s"],
+						}
+					)
+					num ++;
+				}
+			}
+			if (num == 0){
+				console.log("no clips");
+				this.post_list = [];
+				return 1;
+			}
+			console.log(this.post_list);
+			return 0;
+		},
+
+
+		// 通过id 查找savePath
+		get_savePath_from_id(id){
+			for(var t=0; t<this.music_list.length; t++){
+				if (id == this.music_list[t]["id"]){
+					return this.music_list[t]["savePath"];
+				}
+			}
+			return "";
 		}
-
-
-
   },
 };
 </script>
