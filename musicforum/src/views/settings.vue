@@ -289,6 +289,14 @@ export default {
 	  };
   	},
   },
+  axios.get("https://47.103.149.25:8081/music/user/detail/{id}",{
+  msg:'get_name',
+  sponsor_id: this.$route.query.id,
+})
+  axios.post("https://47.103.149.25:8081/music/user/modify",{
+  msg:'success',
+  sponsor_id: this.$route.query.id,
+  })
 };
 </script>
 
