@@ -22,8 +22,6 @@ public class FriendServiceImpl implements FriendService {
     UserMapper userMapper;
     @Autowired
     FriendMapper friendMapper;
-    @Autowired
-    FriendService friendService;
 
     public Result addFriend(Long user1Id, Long user2Id){
         users user1 = userMapper.selectById(user1Id);

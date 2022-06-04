@@ -79,11 +79,9 @@
         </v-list>
       </v-navigation-drawer>
 	  
-	  <v-col >
-	  <div class="about">
-	    <h2>广场：杨幂爱的二八定律ym杨幂秦施</h2>
+	 <div style="margin:auto" id="muscard">
+      <muscard></muscard>
 	  </div>
-	  </v-col >
 	  </v-row>
     </v-card>
 </v-card>
@@ -91,7 +89,11 @@
 
 <script>
 
+import muscard from '../muscard.vue'
 export default {
+	components:{
+    'muscard':muscard
+  },
   data () {
     return {
       drawer: true,

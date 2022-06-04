@@ -9,11 +9,10 @@
                 <v-card-title class="text-h5" v-text="item.title"></v-card-title>
                 <v-card-subtitle v-text="item.artist"></v-card-subtitle>
                 <v-card-actions>
-                  <v-col cols="10">
-                    <v-btn icon outlined large color="indigo" @click="playmusic(item)">
-                      <v-icon>{{ item.play? 'mdi-pause':'mdi-play'}}</v-icon>
-                    </v-btn>
-
+                  <v-col cols=auto>
+                    <div class="audio_con">
+                    <audio ref='audio' src="../assets/demo.mp3" controls loop class="myaudio" @click="playmusic(item)"> </audio>
+                    </div>
                   </v-col>
                   <v-col cols=auto>
                     <v-btn icon color="pink" @click="toggle_like(item)">
@@ -37,10 +36,18 @@
                 <v-expand-transition>
                   <div v-show="item.comment">
                      <v-divider></v-divider>
+                    <!--其他人发表的评论-->
+                    <v-vol v-for="(cmt, j) in item.comments" :key="j">
+                    <v-list-item two-line>
+                    <v-list-item-content>
+                    <v-list-item-title>{{cmt.id}}</v-list-item-title>
+                    <v-list-item-subtitle>{{cmt.content}}</v-list-item-subtitle>
+                    </v-list-item-content>
+                    </v-list-item>
+                    </v-vol>
                     <v-card-text>
                        发表你的评论
                     </v-card-text>
-                    <!--还没加其他人发表的评论-->
                     <v-form>
                       <v-col>
                     <v-textarea clearable clear-icon="mdi-close-circle" label="Text"></v-textarea>
@@ -53,7 +60,7 @@
                 </v-expand-transition>
               </div>
               <v-avatar class="ma-3" size="125" tile>
-                 <v-img :src="item.src"></v-img>
+                 <v-img :src="item.img"></v-img>
               </v-avatar>
             </div>
            </v-card>
@@ -69,35 +76,49 @@
     data: () => ({
       items: [
         {
-          src: 'https://y.qq.com/music/photo_new/T002R300x300M000002xxKCD31H35a_1.jpg?max_age=2592000',
+          img: 'https://y.qq.com/music/photo_new/T002R300x300M000002xxKCD31H35a_1.jpg?max_age=2592000',
           title: 'Thunderous',
           artist: 'Stray Kids',
-          demo: './assets/demo.mp3',
-          likecnt: 0,
+          src: "../assets/demo.mp3",
+          likecnt: 10,
           likestatus: false,
-          play:false,
+          playing:false,
           comment:false,
           star: false,
+          comments:[{
+            id: 'Vocalnooo',
+            content: '迷曲好听, 令人着迷'
+          },
+          {
+            id: '3Racha',
+            content: 'Good job'
+          }
+          ]
         },
         {
-          src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
+          img: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
           title: 'Halcyon Days',
           artist: 'Ellie Goulding',
-          demo: './assets/demo.mp3',
-          likecnt: 0,
+          src: '../assets/demo.mp3',
+          likecnt: 5,
           likestatus: false,
-          play:false,
+          playing:false,
           comment:false,
           star: false,
+          comments:[{
+            id: 'o.o',
+            content: 'It is a beautiful song.'
+          },
+          ]
         },
         {
-          src: 'https://y.qq.com/music/photo_new/T002R150x150M000000cGypg4Ij15R.jpg?max_age=2592000',
+          img: 'https://y.qq.com/music/photo_new/T002R150x150M000000cGypg4Ij15R.jpg?max_age=2592000',
           title: 'Rollin',
           artist: 'Brave Girls',
-          demo: '../assets/demo.mp3',
-          likecnt: 0,
+          src: '../assets/demo.mp3',
+          likecnt: 2,
           likestatus: false,
-          play:false,
+          playing:false,
           comment:false,
           star: false,
         }
@@ -111,20 +132,15 @@
                 item.likecnt--
             }
             item.likestatus=!item.likestatus
-        },
-        person(){
-          //还没写，跳转到发布者的主页
-        },    
+        },   
         playmusic(item){
-          item.play=!item.play
-          console.log(play)
-          if(item.play){
-            let audio = new Audio()
-            audio.src = item.demo
-            audio.play();
+          item.playing=!item.playing
+          console.log(playing)
+          if(item.playing){
+            this.play();
           }
-          else audio.pause();
-        }   
+          else this.pause();
+        }  
     }
   }
 </script>

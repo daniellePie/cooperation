@@ -1,6 +1,11 @@
 server:
-  port: 80
+  port: 8081
+
 spring:
+  #配置时区
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
   # 配置数据源信息
   datasource:
     # 配置数据源类型
@@ -16,7 +21,13 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 user:
   # 默认头像地址
-  default-avator: music/photo/avator/default
+  default-avatar: music/photo/avator/default
+  avatar-parent-path: music/photo/avator/
+music:
+  # 音频相关父路径
+  local-storage-parent-path: /home/music/storage/
+  remote-storage-parent-path: /music/music/
+  musicImg-parent-path: /music/photo/music/
 qiniu:
   AccessKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl
   SecretKey: ClKlr0st1nn2IrLIEI846K8VG06aShpRazIFrSDl

@@ -14,11 +14,11 @@ import com.alibaba.fastjson.JSON;
 @Component
 public class qiniuUtils {
     @Value("${user.efault-avator}")
-    private String dafaultAvatorPath;
+    private static String dafaultAvatorPath;
     @Value("${qiniu.AccessKey}")
-    private String accessKey;
+    private static String accessKey;
     @Value("${qiniu.SecretKey}")
-    private String secretKey;
+    private static String secretKey;
 
     public static final String url = "http://rapxqudxt.hd-bkt.clouddn.com/";
 

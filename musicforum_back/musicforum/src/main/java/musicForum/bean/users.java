@@ -24,11 +24,11 @@ public class users {
     private String email;
     private Integer age;
     private String sex;
-    private Date create_date;
-    private Date birthday;
+    private Date createTime;
+    private String birthday;
     private String introduction;
     private Integer show;
     //头像，有一个默认头像,写在配置文件中
-    private String avator;
+    private String avatar;
 
 }
