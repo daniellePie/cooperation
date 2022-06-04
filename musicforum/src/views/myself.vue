@@ -64,19 +64,25 @@
 						</v-list-item>
 					</v-list>
 				</v-navigation-drawer>
-
+				<div style="margin:auto">
+				<muscard> </muscard>
+				</div>
 				<v-col>
-					<div class="about">
-						<h2>个人中心</h2>
-					</div>
 				</v-col>
 			</v-row>
 		</v-card>
 	</v-card>
+
+
+
 </template>
 
 <script>
+	import muscard from './muscard.vue'
 	export default {
+		components: {
+			'muscard': muscard
+		},
 		data() {
 			return {
 				drawer: true,
@@ -104,10 +110,15 @@
 			det(title) {
 				if (title == '我的关注') {
 					this.$router.push({ path: '/myfollowing', query: { 'id': this.id } })
+				}
+				else if (title == '我的评论'){
+					this.$rotuer.push({ path: '/mycomment', query: {'id':this.id}})
 				};
 			},
 		},
+
 	};
+
 </script>
 
 <style scoped>
