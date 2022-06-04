@@ -79,44 +79,40 @@
         </v-list>
       </v-navigation-drawer>
 	  
-			<v-col >
-				<div class="about">
-					<h2>广场：杨幂爱的二八定律ym杨幂秦施</h2>
-				</div>
-
-			</v-col >
-
-
+	 <div style="margin:auto" id="muscard">
+      <muscard></muscard>
+	  </div>
 	  </v-row>
-	</v-card>
-	</v-card>
+    </v-card>
+</v-card>
 </template>
 
 <script>
 
+import muscard from '../muscard.vue'
 export default {
+	components:{
+    'muscard':muscard
+  },
   data () {
     return {
       drawer: true,
-			id:1,
-			info:{ name:'ymym', img:'https://i.ibb.co/H7vjrLr/3.jpg'},
-				items: [
-					{ title: '首页', icon: 'mdi-home-city' },
-					{ title: '我的关注', icon: 'mdi-account' },
-					{ title: '热门音频', icon: 'mdi-account-group-outline' },
-					{ title: '个人中心', icon: 'mdi-account-group-outline' },
-					{ title: '创作中心', icon:'mdi-account-group-outline'},
-					{ title: '设置', icon: 'mdi-account-group-outline' },
-				],
-				mini: true,
+	  id:1,
+	  info:{ name:'ymym', img:'https://i.ibb.co/H7vjrLr/3.jpg'},
+      items: [
+        { title: '首页', icon: 'mdi-home-city' },
+        { title: '我的关注', icon: 'mdi-account' },
+        { title: '热门音频', icon: 'mdi-account-group-outline' },
+		{ title: '个人中心', icon: 'mdi-account-group-outline' },
+		{ title: '设置', icon: 'mdi-account-group-outline' },
+      ],
+      mini: true,
     }
   },
-
   methods:{
-		hh(){
-			this.$router.push({path:'/registerorlogin'})
-		},
-
+	hh(){
+		this.$router.push({path:'/registerorlogin'})
+	},
   	det(title){
 	  if (title == '首页') {
 	    this.$router.push({path:'/',query:{'id':this.id}})
@@ -126,14 +122,10 @@ export default {
 		this.$router.push({path:'/hotaudio',query:{'id':this.id}})
 	  } else if (title == '个人中心') {
 		this.$router.push({path:'/myself',query:{'id':this.id}})
-		} else if (title == '创作中心') {
-		this.$router.push({path:'/workspace',query:{'id':this.id}})
 	  } else {
 		this.$router.push({path:'/settings',query:{'id':this.id}})
 	  };
   	},
-
-		
   },
 };
 </script>
