@@ -38,8 +38,8 @@
 		</v-card>
 
 			
-		<!-- <v-card height="100%" > -->
-			<v-row class="mt-2 mr-2" height="100%"
+		<v-card height="100%" >
+			<v-row class="fill-height" no-gutters
 			>
 					<v-navigation-drawer
 						v-model="drawer"
@@ -401,7 +401,8 @@
 
 			</v-row>
 		</v-card>
-	<!-- </v-card> -->
+	</v-card>
+	
 	<!-- </v-container> -->
 
 </template>
@@ -443,7 +444,7 @@ export default {
     return {
       drawer: true,
 			id:1,
-			info:{ name:'ymym'},
+			info:{name:'ymym', img:'https://i.ibb.co/H7vjrLr/3.jpg'},
 				items: [
 					{ title: '首页', icon: 'mdi-home-city' },
 					{ title: '我的关注', icon: 'mdi-account' },
@@ -903,11 +904,15 @@ export default {
 				// axios.get('http://47.103.149.25:8081/music/musicInfo/detail/1')
 				.then((response)=> {
 					this.info_gen = "生成成功，点击重新生成";
-					console.log(response.data);
+					this.music_lsit= response.data.data["url"];
+					this.$refs.audio.src = response.data.data["url"];
+					// console.log(response.data);.data
 				})
 				.catch((error) => {
 					console.log(error);
 					this.info_gen = "服务器错误，生成失败";
+					this.music_list = "";
+					this.$refs.audio.src = "";
 				});
 			}else{
 				// console.log(this.post_list);
