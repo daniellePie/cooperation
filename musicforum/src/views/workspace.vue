@@ -212,7 +212,7 @@
 									</v-card>
 								</v-row>
 									<!-- <h1>{{mouse_x}} {{mouse_y}}</h1> -->
-								<h2>{{post_list}}</h2>
+								<!-- <h2>{{post_list}}</h2> -->
 							</v-col>
 
 							<v-col cols="12" sm="6">
@@ -246,10 +246,17 @@
 												cols="12"
 												sm="10"
 											>
-												<v-text-field
+												<!-- 由于功能修改，进行替换 -->
+												<!-- <v-text-field
 													label="时长/s"
 													placeholder="音乐片段的插入时长"
 													@change="clip_len_change($event)"
+													v-model="sel_value_len_s"
+												></v-text-field> -->
+												<v-text-field
+													label="时长/s"
+													placeholder="音乐片段的插入时长"
+													disabled
 													v-model="sel_value_len_s"
 												></v-text-field>
 											</v-col>
@@ -821,14 +828,29 @@ export default {
 
 		// clip id改变
 		clip_id_change(e){
+			console.log(this.music_list);
 			this.sel_value_id = e;
-			// this.set_value_len_s = e;
-			this.sel_value_len=Math.ceil(this.sel_value_len_s/this.track_clip_length);
+			// 可变音乐片长度功能
+			// this.sel_value_len=Math.ceil(this.sel_value_len_s/this.track_clip_length);
+			
+			// 固定音乐片段长度功能
+			if (e == ""){
+				this.sel_value_len_s = 1;
+				this.sel_value_len = 1;
+				return
+			}
+			for (var i=0;i<this.music_list.length;i++){
+				if (e == this.music_list[i]["id"]){
+					this.sel_value_len_s = this.music_list[i]["duration"];
+					this.sel_value_len = Math.ceil(this.music_list[i]["duration"]/this.track_clip_length);
+				}
+			}
 		},
 
 		// clip 音乐长度改变
 		clip_len_change(e){
-			this.set_value_len_s = e;
+			// 可变音乐片段长度功能
+			this.sel_value_len_s = e;
 			this.sel_value_len=Math.ceil(e/this.track_clip_length);
 		},
 
@@ -903,13 +925,14 @@ export default {
 				axios.post('http://47.103.149.25:8081/music/musicUpdate/generateMusic',this.post_list)
 				// axios.get('http://47.103.149.25:8081/music/musicInfo/detail/1')
 				.then((response)=> {
+					console.log(response.data);
 					this.info_gen = "生成成功，点击重新生成";
 					this.music_lsit= response.data.data["url"];
 					this.$refs.audio.src = response.data.data["url"];
 					// console.log(response.data);.data
 				})
 				.catch((error) => {
-					console.log(error);
+					// console.log(error);
 					this.info_gen = "服务器错误，生成失败";
 					this.music_list = "";
 					this.$refs.audio.src = "";
