@@ -95,46 +95,61 @@
 							<v-row>
 							<v-col cols="12" sm="6">
 								<v-row class=" d-flex justify-center ma-2">
-									<h1>Track</h1>
+									<h1>音轨</h1>
 								</v-row>
-								<v-row class=" d-flex justify-center ma-2">
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="generate_music()">play</v-btn></v-col>
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="add_track()">+</v-btn></v-col>
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="redu_track()">-</v-btn></v-col>
-								</v-row>
+								
 
 								<v-row class=" d-flex justify-center ma-2">
+									<v-card>
 									<v-col cols="12" sm="12" class="d-flex justify-center ma-1"><h3 >修改音轨属性信息</h3></v-col>
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2">
-										<v-text-field
-											label="时间片单位长度/s"
-											placeholder="每个时间片代表的时间长度，默认为1s"
-											@change="track_clip_length_change($event)"
-											:value="track_clip_length"
-										></v-text-field>
-									</v-col>
+									<v-row class=" d-flex justify-center ma-2">
+										<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="add_track()">+</v-btn></v-col>
+										<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="redu_track()">-</v-btn></v-col>
+									</v-row >
+									<v-row class=" d-flex justify-center ma-2">
+										<v-col cols="12" sm="3" class="d-flex justify-center ma-2">
+											<v-text-field
+												label="时间片单位长度/s"
+												placeholder="每个时间片代表的时间长度，默认为1s"
+												@change="track_clip_length_change($event)"
+												:value="track_clip_length"
+											></v-text-field>
+										</v-col>
 
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2	">
-										<v-text-field
-											label="时间片数量"
-											placeholder="每个音轨包含的时间片数量，默认为32"
-											@change="track_clip_num_change($event)"
-											:value="track_clip_num"
-										></v-text-field>
-									</v-col>
+										<v-col cols="12" sm="3" class="d-flex justify-center ma-2	">
+											<v-text-field
+												label="时间片数量"
+												placeholder="每个音轨包含的时间片数量，默认为32"
+												@change="track_clip_num_change($event)"
+												:value="track_clip_num"
+											></v-text-field>
+										</v-col>
 
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2	" >
-										<v-list-item  two-line >
-											<v-list-item-content>
-												<v-list-item-title>注意：</v-list-item-title>
-												<v-list-item-subtitle>修改音轨属性会清空音轨内容</v-list-item-subtitle>
-											</v-list-item-content>
-										</v-list-item>
-									</v-col>
-									<h3>{{select_clip}}</h3>
+										<v-col cols="12" sm="3" class="d-flex justify-center ma-2	" >
+											<v-list-item  two-line >
+												<v-list-item-content>
+													<v-list-item-title>注意：</v-list-item-title>
+													<v-list-item-subtitle>修改音轨属性会清空音轨内容</v-list-item-subtitle>
+												</v-list-item-content>
+											</v-list-item>
+										</v-col>
+									</v-row>
+									<!-- <h3>{{select_clip}}</h3>
 									<h3>{{track}}</h3>
-									<h3>len {{sel_value_len}} lens {{sel_value_len_s}}</h3>
+									<h3>len {{sel_value_len}} lens {{sel_value_len_s}}</h3> -->
+									</v-card>
+								</v-row>
 
+								<v-row 
+									class="7 d-flex justify-center ma-2" 
+									justify="center"
+									>
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="generate_music()">生成</v-btn></v-col>
+									<v-col cols=auto>
+										<div class="audio_con">
+										<audio ref='audio' src="" controls loop class="myaudio" @click="playmusic(item)"> </audio>
+										</div>
+									</v-col>
 								</v-row>
 
 								<v-row 
@@ -238,7 +253,7 @@
 											sm="12"
 											justify="center"
 										>
-											<h1>音乐片段查询</h1>
+											<h1>音乐素材查询</h1>
 										</v-row>
 										
 										<v-row justify="center">
@@ -249,7 +264,7 @@
 											>
 												<v-select
 													:items="clip_id_list"
-													label="音乐片段id"
+													label="音乐素材id"
 													@change="cur_id_change($event)"
 													:value="cur_id"
 												></v-select>
@@ -311,11 +326,6 @@
 					<!-- 结束内容，不在这个col外写东西 -->
 				</v-col >
 
-
-				
-				
-			
-
 			</v-row>
 		</v-card>
 	<!-- </v-card> -->
@@ -349,10 +359,6 @@ export default {
 					this.clip_id_list.push(response.data.data[i]["id"])
 				}
 			})
-			// .then(function (response) {
-    	// 	console.log(response);
-			// 	console.log(this.music_list);
-  		// })
 			.catch(function (error) {
 				console.log(error)
 			})
@@ -803,15 +809,22 @@ export default {
 		// 生成音乐 
 		async generate_music(){
 			await this.generate_music_foo();
-			if (this.post_list!=[]){
+			// console.log(this.post_list.length);
+			if (this.post_list.length > 0){
 				axios.post('http://47.103.149.25:8081/music/musicUpdate/generateMusic',this.post_list)
+				// axios.get('http://47.103.149.25:8081/music/musicInfo/detail/1')
 				.then(function (response) {
-					console.log(response);
+					console.log(response.data);
 				})
 				.catch(function (error) {
 					console.log(error);
 				});
-				}
+			}else{
+				// console.log(this.post_list);
+				this.music_list = "";
+				this.$refs.audio.src = "";
+				// console.log(this.music_list);
+			}
 		},
 		// 生成请求列表
 		generate_music_foo(){
@@ -852,7 +865,16 @@ export default {
 				}
 			}
 			return "";
-		}
+		},
+
+		playmusic(item){
+			item.playing=!item.playing;
+			console.log(playing);
+			if(item.playing){
+				this.play();
+			}
+			else this.pause();
+		},
   },
 };
 </script>
