@@ -6,6 +6,7 @@ import Settings from '../views/settings.vue'
 import Hotaudio from '../views/hotaudio.vue'
 import Myself from '../views/myself.vue'
 import Register from '../views/register/regis.vue'
+import Create_ai from '../views/create_ai.vue'
 import Forget from '../views/register/forget.vue'
 import Workspace from '../views/workspace.vue'
 import Mymessage from '../views/mymessage'
@@ -16,6 +17,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/create_ai',
+    name: 'create_ai',
+    component: Create_ai
   },
   {
     path: '/registerorlogin',

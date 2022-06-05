@@ -56,18 +56,33 @@
 	export default {
 	  data: () => ({
 		  show1: false,
-		  id:1,
+		  id:11,
 		  rules: {
 		    required: value => !!value || '请输入密码',
 		    min: v => v.length >= 8 || '最少8位密码',
 		  },
-		login : {name:'', password:''}
+		login : {name:'', password:''},
+		status: '',
 	  }),
 	
 	  methods: {
 		det1(){
-		  this.$router.push({path:'/'});
-		  alert("登录成功")
+		axios.post('http://localhost:8081/forget', {
+			msg:'forget',       
+			nickname: this.login.name,
+			password: this.login.password,
+		  })
+		 .then(res=>{
+		   this.status = res.data.status;
+		   this.id = res.data.id;
+		 })
+		  .catch(error => console.log(error));
+		if (this.status == '0'){
+			alert("登录成功")
+			this.$router.push({path:'/'});
+		} else {
+			alert("该用户尚未注册，请前往注册");
+		};
 		},
 		det2(){
 		  this.$router.push({path:'/forget'});

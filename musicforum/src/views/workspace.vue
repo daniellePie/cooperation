@@ -133,7 +133,8 @@ export default {
 					{ title: '我的关注', icon: 'mdi-account' },
 					{ title: '热门音频', icon: 'mdi-account-group-outline' },
 					{ title: '个人中心', icon: 'mdi-account-group-outline' },
-					{ title: '创作中心', icon:'mdi-account-group-outline'},
+					{ title: '音频创作', icon: 'mdi-account' },
+					{ title: 'ai音频续写', icon: 'mdi-account' },
 					{ title: '设置', icon: 'mdi-account-group-outline' },
 				],
 				mini: true,
@@ -163,6 +164,10 @@ export default {
 		this.$router.push({path:'/hotaudio',query:{'id':this.id}})
 	  } else if (title == '个人中心') {
 		this.$router.push({path:'/myself',query:{'id':this.id}})
+	  } else if (title == '音频创作') {
+		this.$router.push({path:'/workspace',query:{'id':this.id}})
+	  } else if (title == 'ai音频续写') {
+		this.$router.push({path:'/create_ai',query:{'id':this.id}})
 	  } else {
 		this.$router.push({path:'/settings',query:{'id':this.id}})
 	  };

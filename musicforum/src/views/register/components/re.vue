@@ -95,14 +95,41 @@
 	  }),
 	
 	  methods: {
-		//没写完
 	    checkpasswd(password, password1){
 	    	if (password === password1) return true
 	    	else return false
 	    },
+		verificationCode () {
+		   if (!this.canClick) return  
+		   this.canClick = false
+		   this.getCode = this.totalTime + 's后重新发送'
+		   let clock = window.setInterval(() => {
+		     this.totalTime--
+		     this.getCode = this.totalTime + 's后重新发送'
+		     if (this.totalTime < 0) {
+		       window.clearInterval(clock)
+		       this.getCode = '重新发送验证码'
+		       this.totalTime = 60
+		       this.canClick = true  
+		     }
+		   },1000)
+		 },
 		hh(){
-			alert('注册成功，请前往登录')
-			this.$router.push({path:'/'})
+			axios.post('http://localhost:8081/forget', {
+				msg:'forget',       
+				newpassword: this.newnew.password,
+				phone: this.newnew.phone,
+			  })
+			 .then(res=>{
+			   this.status = res.data.status;
+			   this.id = res.data.id;
+			 })
+			  .catch(error => console.log(error));
+			if (this.status == '0'){
+				alert('注册成功，请前往登录')
+			} else {
+				alert("该用户已注册，请前往登录");
+			};
 		},
 	  },
 	}
