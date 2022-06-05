@@ -10,6 +10,7 @@ import Create_ai from '../views/create_ai.vue'
 import Forget from '../views/register/forget.vue'
 import Workspace from '../views/workspace.vue'
 import Mymessage from '../views/mymessage'
+import Mycollecting from'../views/mycollecting'
 Vue.use(VueRouter)
 
 const routes = [
@@ -63,6 +64,11 @@ const routes = [
         name: 'mymessage',
         component:Mymessage
     },
+    {
+        path: '/mycollecting',
+        name: 'mycollecting',
+        component:Mycollecting
+    }
 ]
 
 const router = new VueRouter({

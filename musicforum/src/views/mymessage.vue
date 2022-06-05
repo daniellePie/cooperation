@@ -122,7 +122,10 @@
 					this.$router.push({ path: '/myfollowing', query: { 'id': this.id } })
 				}
                 else if (title == '新通知') {
-                    this.$router.push({ path: '/mymessage', query: { 'id': this.id } })
+					this.$router.push({ path: '/mymessage', query: { 'id': this.id } })
+                }
+                else if (title == '我的收藏') {
+                    this.$router.push({ path: '/mycollecting', query: { 'id': this.id } })
 				};
 			},
 		},

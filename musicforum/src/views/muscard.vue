@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="800" class="mx-auto">
+  <v-card width="600" class="mx-auto">
     <v-container>
       <v-row dense>
         <v-col v-for="(item, i) in items" :key="i" cols="12">

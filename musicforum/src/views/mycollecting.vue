@@ -64,6 +64,7 @@
                         </v-list-item>
                     </v-list>
                 </v-navigation-drawer>
+
                 <div style="margin:auto">
                     <muscard> </muscard>
                 </div>
@@ -73,36 +74,36 @@
 </template>
 
 <script>
-    import muscard from './follist.vue';
-    export default {
-        components: {
-            'muscard': muscard
-        },
-        data() {
-            return {
-                drawer: true,
-                id: 1,
-                info: {
-                    name: 'ymym', img: 'https://i.ibb.co/H7vjrLr/3.jpg'
-                },
-                items: [
-                    { title: '我的关注', icon: 'mdi-account' },
-                    { title: '我的收藏', icon: 'mdi-star-outline' },
-                    { title: '我的点赞', icon: 'mdi-thumb-up-outline' },
-                    { title: '我的评论', icon: 'mdi-message-outline' },
-                    { title: '我的转发', icon: 'mdi-message-arrow-right-outline' },
-                    { title: '我的发布', icon: 'mdi-pencil-outline' },
-                    { title: '新通知', icon: 'mdi-email-outline' },
-                    { title: '我的待审核', icon: 'mdi-clipboard-clock-outline' },
-                ],
-                mini: true,
-            }
-        },
-        methods: {
-            hh() {
-                this.$router.push({ path: '/registerorlogin' })
-            },
-            det(title) {
+	import muscard from './collecard.vue'
+	export default {
+		components: {
+			'muscard': muscard
+		},
+		data() {
+			return {
+				drawer: true,
+				id: 1,
+				info: {
+					name: 'ymym', img: 'https://i.ibb.co/H7vjrLr/3.jpg'
+				},
+				items: [
+					{ title: '我的关注', icon: 'mdi-account' },
+					{ title: '我的收藏', icon: 'mdi-star-outline' },
+					{ title: '我的点赞', icon: 'mdi-thumb-up-outline' },
+					{ title: '我的评论', icon: 'mdi-message-outline' },
+					{ title: '我的转发', icon: 'mdi-message-arrow-right-outline' },
+					{ title: '我的发布', icon: 'mdi-pencil-outline' },
+					{ title: '新通知', icon: 'mdi-email-outline' },
+					{ title: '我的待审核', icon: 'mdi-clipboard-clock-outline' },
+				],
+				mini: true,
+			}
+		},
+		methods: {
+			hh() {
+				this.$router.push({ path: '/registerorlogin' })
+			},
+			det(title) {
                 if (title == '我的关注') {
                     this.$router.push({ path: '/myfollowing', query: { 'id': this.id } })
                 }
@@ -110,13 +111,14 @@
                     this.$router.push({ path: '/mymessage', query: { 'id': this.id } })
                 }
                 else if (title == '我的收藏') {
+                    this.$router.push({ path: '/mycollecting', query: { 'id': this.id } })
+                }
+                else if (title == '我的收藏') {
                     this.$router.push({ path: '/mycollecting', query: { 'id':this.id } })
-                };
-            },
-        },
-
-    };
-
+				};
+			},
+		},
+	};
 </script>
 
 <style scoped>
