@@ -88,7 +88,7 @@
 </template>
 
 <script>
-	import muscard from './muscard.vue'
+	import muscard from './messlist.vue'
 	export default {
 		components: {
 			'muscard': muscard
