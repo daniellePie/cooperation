@@ -350,6 +350,12 @@
 												></v-select>
 											</v-col>
 											
+											<v-col cols=auto>
+												<div class="audio_con">
+												<audio ref='audio_2' src="" controls loop class="myaudio" @click="playmusic(item)"> </audio>
+												</div>
+											</v-col>
+
 											<v-col
 												class="d-flex justify-center ma-5"
 												cols="12"
@@ -357,7 +363,7 @@
 											>
 												<v-list-item  two-line>
 													<v-list-item-content>
-														<v-list-item-title>音乐作品id</v-list-item-title>
+														<v-list-item-title>音乐素材id</v-list-item-title>
 														<v-list-item-subtitle>{{cur_id}}</v-list-item-subtitle>
 													</v-list-item-content>
 												</v-list-item>
@@ -390,6 +396,7 @@
 												</v-list-item>
 
 											</v-col>
+											
 										</v-row>
 									</v-card>
 								</v-row>
@@ -867,6 +874,17 @@ export default {
 					break;
 				}
 			}
+			// 
+			axios
+			.get('http://47.103.149.25:8081/music/musicInfo/detail/'+e)
+			.then(response=>{
+				// console.log(response.data.data["audioUrl"]);
+				this.$refs.audio_2.src = response.data.data["audioUrl"];
+			})
+			.catch(function (error) {
+				this.$refs.audio.src = "";
+				console.log(error);
+			})
 		},
 
 		// 处理音轨单位长度
