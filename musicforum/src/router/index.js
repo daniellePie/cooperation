@@ -8,6 +8,7 @@ import Myself from '../views/myself.vue'
 import Register from '../views/register/regis.vue'
 import Forget from '../views/register/forget.vue'
 import Workspace from '../views/workspace.vue'
+import Mymessage from '../views/mymessage'
 Vue.use(VueRouter)
 
 const routes = [
@@ -50,7 +51,12 @@ const routes = [
     path: '/workspace',
     name: 'workspace',
     component: Workspace
-  },
+    },
+    {
+        path: '/mymessage',
+        name: 'mymessage',
+        component:Mymessage
+    },
 ]
 
 const router = new VueRouter({
