@@ -439,24 +439,24 @@ export default {
 		}
 
 		axios
-      .get('http://47.103.149.25:8081/music/musicInfo/infoForGenerate')
-      .then(response=>{
-				this.music_list = response.data.data;
-				// console.log(response)
-				for (var i=0; i<response.data.data.length; i++){
-					this.clip_id_list.push(response.data.data[i]["id"])
-				}
-			})
-			.catch(function (error) {
-				console.log(error)
-			})
+      	.get('http://47.103.149.25:8081/music/musicInfo/infoForGenerate')
+      	.then(response=>{
+			this.music_list = response.data.data;
+			// console.log(response)
+			for (var i=0; i<response.data.data.length; i++){
+				this.clip_id_list.push(response.data.data[i]["id"])
+			}
+		})
+		.catch(function (error) {
+			console.log(error)
+		})
 	},
 
 	// info {name:'ymym', img:'https://i.ibb.co/H7vjrLr/3.jpg'}
 
-  data () {
-    return {
-      drawer: true,
+  	data () {
+		return {
+			drawer: true,
 			id:1,
 			info:{name:'ymym', img:'https://i.ibb.co/H7vjrLr/3.jpg'},
 				items: [
@@ -529,36 +529,31 @@ export default {
 			info_add:"添加音乐片段",
 			info_redu:"删除音乐片段",
 			info_edit:"修改音乐片段",
-    }
-  },
+    	}
+  	},
 
-  methods:{
+  	methods:{
 		hh(){
 			this.$router.push({path:'/registerorlogin'})
 		},
 
-  	det(title){
-	  if (title == '首页') {
-	    this.$router.push({path:'/',query:{'id':this.id}})
-	  } else if (title == '我的关注') {
-	    this.$router.push({path:'/myfollowing',query:{'id':this.id}})
-	  } else if (title == '热门音频') {
-		this.$router.push({path:'/hotaudio',query:{'id':this.id}})
-	  } else if (title == '个人中心') {
-		this.$router.push({path:'/myself',query:{'id':this.id}})
-<<<<<<< HEAD
-	  } else if (title == '音频创作') {
-		this.$router.push({path:'/workspace',query:{'id':this.id}})
-	  } else if (title == 'ai音频续写') {
-		this.$router.push({path:'/create_ai',query:{'id':this.id}})
-=======
-		} else if (title == '创作中心') {
-  	this.$router.push({path:'/workspace',query:{'id':this.id}})
->>>>>>> c6b79d7332c28b2ee6f98290eb9c8937d67c8221
-	  } else {
-		this.$router.push({path:'/settings',query:{'id':this.id}})
-	  };
-  	},
+		det(title){
+		if (title == '首页') {
+			this.$router.push({path:'/',query:{'id':this.id}})
+		} else if (title == '我的关注') {
+			this.$router.push({path:'/myfollowing',query:{'id':this.id}})
+		} else if (title == '热门音频') {
+			this.$router.push({path:'/hotaudio',query:{'id':this.id}})
+		} else if (title == '个人中心') {
+			this.$router.push({path:'/myself',query:{'id':this.id}})
+		} else if (title == '音频创作') {
+			this.$router.push({path:'/workspace',query:{'id':this.id}})
+		} else if (title == 'ai音频续写') {
+			this.$router.push({path:'/create_ai',query:{'id':this.id}})
+		} else {
+			this.$router.push({path:'/settings',query:{'id':this.id}})
+		};
+		},
 
 
 
@@ -1020,7 +1015,7 @@ export default {
 			}
 			else this.pause();
 		},
-  },
+  	},
 };
 </script>
 
