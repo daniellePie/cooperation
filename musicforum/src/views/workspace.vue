@@ -103,8 +103,35 @@
 									<v-card>
 									<v-col cols="12" sm="12" class="d-flex justify-center ma-1"><h3 >修改音轨属性信息</h3></v-col>
 									<v-row class=" d-flex justify-center ma-2">
-										<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="add_track()">+</v-btn></v-col>
-										<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="redu_track()">-</v-btn></v-col>
+										<v-col cols="12" sm="3" class="d-flex justify-center ma-2">
+											<v-tooltip bottom>
+												<template v-slot:activator="{ on, attrs }">
+													<v-btn
+														v-bind="attrs"
+														v-on="on"
+														@click="add_track()"
+													>
+														添加音轨
+													</v-btn>
+												</template>
+												<span>{{info_add_track}}</span>
+											</v-tooltip>
+										</v-col>
+										<v-col cols="12" sm="3" class="d-flex justify-center ma-2">
+											<v-tooltip bottom>
+												<template v-slot:activator="{ on, attrs }">
+													<v-btn
+														v-bind="attrs"
+														v-on="on"
+														@click="redu_track()"
+													>
+														删除音轨
+													</v-btn>
+												</template>
+												<span>{{info_redu_track}}</span>
+											</v-tooltip>
+										</v-col>
+										
 									</v-row >
 									<v-row class=" d-flex justify-center ma-2">
 										<v-col cols="12" sm="3" class="d-flex justify-center ma-2">
@@ -144,7 +171,20 @@
 									class="7 d-flex justify-center ma-2" 
 									justify="center"
 									>
-									<v-col cols="12" sm="3" class="d-flex justify-center ma-2"><v-btn @click="generate_music()">生成</v-btn></v-col>
+									<v-col cols="12" sm="3" class="d-flex justify-center ma-2">
+										<v-tooltip bottom>
+											<template v-slot:activator="{ on, attrs }">
+												<v-btn
+													v-bind="attrs"
+													v-on="on"
+													@click="generate_music()"
+												>
+													生成
+												</v-btn>
+											</template>
+											<span>{{info_gen}}</span>
+										</v-tooltip>
+									</v-col>
 									<v-col cols=auto>
 										<div class="audio_con">
 										<audio ref='audio' src="" controls loop class="myaudio" @click="playmusic(item)"> </audio>
@@ -219,7 +259,18 @@
 												cols="12"
 												sm="3"
 											>
-												<v-btn @click="add_clips()">添加</v-btn>
+												<v-tooltip top>
+													<template v-slot:activator="{ on, attrs }">
+														<v-btn
+															v-bind="attrs"
+															v-on="on"
+															@click="add_clips()"
+														>
+															添加
+														</v-btn>
+													</template>
+													<span>{{info_add}}</span>
+												</v-tooltip>
 											</v-col>
 
 											<v-col
@@ -227,7 +278,18 @@
 												cols="12"
 												sm="3"
 											>
-												<v-btn @click="edit_clips()">修改</v-btn>
+												<v-tooltip top>
+													<template v-slot:activator="{ on, attrs }">
+														<v-btn
+															v-bind="attrs"
+															v-on="on"
+															@click="edit_clips()"
+														>
+															修改
+														</v-btn>
+													</template>
+													<span>{{info_edit}}</span>
+												</v-tooltip>
 											</v-col>
 
 											<v-col
@@ -235,7 +297,18 @@
 												cols="12"
 												sm="3"
 											>
-												<v-btn @click="redu_clips()">删除</v-btn>
+												<v-tooltip top>
+													<template v-slot:activator="{ on, attrs }">
+														<v-btn
+															v-bind="attrs"
+															v-on="on"
+															@click="redu_clips()"
+														>
+															删除
+														</v-btn>
+													</template>
+													<span>{{info_redu}}</span>
+												</v-tooltip>
 											</v-col>
 
 										</v-row>
@@ -433,6 +506,13 @@ export default {
 
 			// 音乐地址
 			music_url:"",
+
+			info_gen:"生成音乐",
+			info_add_track:"添加音轨",
+			info_redu_track:"删除音轨",
+			info_add:"添加音乐片段",
+			info_redu:"删除音乐片段",
+			info_edit:"修改音乐片段",
     }
   },
 
@@ -457,12 +537,14 @@ export default {
 	  };
   	},
 
+
+
+		// 添加音轨
 		async add_track(){
 			await this.add_track_foo()
-			console.log(this.track_num)
+			this.info_redu_track = "删除音轨";
 			this.draw_a()
 		},
-
 		add_track_foo(){
 			this.track.push({})
 			this.track[this.track_num]["id"] = "myCanvas_"+this.track_num
@@ -470,15 +552,22 @@ export default {
 			this.track_num = this.track_num+1
 		},
 
+		// 删除音轨
 		async redu_track(){
 			await this.redu_track_foo()
-			console.log(this.track_num)
+			// console.log(this.track_num)
+			if (this.track_num == 0){
+				this.info_redu_track =  "当前无音轨，无法删除";
+			}else{
+				this.info_redu_track = "删除音轨";
+			}
 			this.draw_a()
 		},
-
 		redu_track_foo(){
-			this.track.pop()
-			this.track_num = this.track_num-1
+			if(this.track_num >0){
+				this.track.pop()
+				this.track_num = this.track_num-1
+			}
 		},
 
 
@@ -490,7 +579,6 @@ export default {
 			this.sel_value_id=this.select_clip["id"]
 		},
 		// @click="getMouseXY($event)"
-		// 处理位于音轨上的点击，主要用来选择音乐片
 		getSelect_foo(e){
 			this.mouse_x = e.x //获取鼠标的X坐标（鼠标与屏幕左侧的距离，单位为px
 			this.mouse_y = e.y //获取鼠标的Y坐标（鼠标与屏幕顶部的距离，单位为px
@@ -813,14 +901,17 @@ export default {
 			if (this.post_list.length > 0){
 				axios.post('http://47.103.149.25:8081/music/musicUpdate/generateMusic',this.post_list)
 				// axios.get('http://47.103.149.25:8081/music/musicInfo/detail/1')
-				.then(function (response) {
+				.then((response)=> {
+					this.info_gen = "生成成功，点击重新生成";
 					console.log(response.data);
 				})
-				.catch(function (error) {
+				.catch((error) => {
 					console.log(error);
+					this.info_gen = "服务器错误，生成失败";
 				});
 			}else{
 				// console.log(this.post_list);
+				this.info_gen = "请在音轨插入内容后重新生成"
 				this.music_list = "";
 				this.$refs.audio.src = "";
 				// console.log(this.music_list);
